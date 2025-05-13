@@ -1,4 +1,11 @@
 
+- 断言：Assertions 
+- 过程实例启动：Start of Process Instances
+- 数据库配置：Database Configuration
+- 依赖：Dependency
+- CIB seven 集成测试：CIB seven Integration Test
+
+
 # 项目术语说明  
 
 #### Camunda BPM  
@@ -126,5 +133,6 @@ Systemd Service Unit
 中文：系统服务单元
 
 用途：在 Linux 系统中管理 Spring Boot 应用的后台服务（启动、监控、重启）。
+
 
 
