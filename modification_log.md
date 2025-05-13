@@ -10,3 +10,25 @@
 - 新增：安全配置建议章节（密钥管理、HTTPS强制要求）  
 - 修复：`application.yaml`缩进格式统一  
 
+markdown
+# Project Change Log
+ 
+## Version History
+ 
+### **v1.1.0** | 2025-05-13 | Wenhua Yang
+- **Enhancements**:
+  - Expanded Camunda engine parameters (`schema-update`, `history-level`)
+  - Added security configuration recommendations (key management, HTTPS enforcement)
+- **Fixes**:
+  - Standardized YAML indentation formatting
+ 
+### **v1.0.0** | 2025-05-13 | Wenhua Yang
+- **New Features**:
+  - Camunda core configurations (admin accounts, task filters)
+  - CIB Seven platform connection parameters (API endpoints, authentication keys)
+  - Multi-environment Profile configuration examples
+ 
+---
+ 
+
+

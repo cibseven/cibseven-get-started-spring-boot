@@ -1,65 +1,151 @@
-使用教程-配置杨文华
+使用教程 - 配置
+杨文华
+贡献范围：核心配置项解析、Camunda集成配置、CIB Seven服务连接、多环境管理
 
-1. 基础环境配置
-在 application.yaml 中配置Camunda管理用户和流程过滤器：
+```markdown
+# CIBSeven 集成配置中心
 
-yaml
-camunda.bpm:
-  admin-user:
-    id: demo               # 管理账号用户名（生产环境需修改）
-    password: demo         # 管理账号密码（生产环境需修改）
-    firstName: Demo        # 显示名称
-  filter:
-    create: All tasks      # 默认任务过滤器
-2. CIB Seven 平台连接配置
-在 application.yaml 中添加以下参数以对接CIB Seven金融服务：
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1-green.svg)](https://spring.io/projects/spring-boot)
 
-yaml
+##  系统特性
+
+-  **开箱即用**：预配置Camunda流程引擎与CIB Seven服务连接
+-  **安全通信**：支持AES256加密与敏感信息加密存储
+-  **多环境管理**：dev/test/prod环境配置一键切换
+-  **监控就绪**：集成Spring Actuator健康检查与指标监控
+-  **自动部署**：BPMN流程定义文件自动加载机制
+
+##  快速开始
+
+### 环境要求
+- JDK 17+
+- Camunda 7.18+
+- MySQL 8.0+ / PostgreSQL 14+
+
+### 启动步骤
+1. 克隆配置仓库
+```bash
+git clone https://github.com/yourorg/cibseven-config.git
+```
+
+2. 配置环境变量
+```bash
+export CIB_API_KEY=your_development_key
+export MAIL_PASSWORD=your_smtp_password
+```
+
+3. 启动开发环境
+```bash
+mvn spring-boot:run -Dspring.profiles.active=dev
+```
+
+##  系统架构
+
+```mermaid
+graph TD
+    A[应用服务] --> B{环境配置}
+    B -->|dev| C[开发配置]
+    B -->|prod| D[生产配置]
+    C --> E[自动部署流程]
+    D --> F[加密通信]
+    E --> G[Camunda引擎]
+    F --> H[CIB Seven平台]
+```
+
+##  配置指南
+
+### 基础配置
+```yaml
+# application.yaml
+server:
+  port: 8080
+spring:
+  application:
+    name: cibseven-integration
+  profiles:
+    active: dev  # 默认开发环境
+
 cibseven:
-  api:
-    base-url: https://api.cibseven.com/v1  # 平台API地址
-    auth:
-      client-id: your-client-id            # 客户端ID（从平台获取）
-      secret-key: your-secret-key          # 密钥（从平台获取）
-    timeout: 5000                          # 接口超时时间（毫秒）
-3. Camunda流程引擎配置
-自动部署流程：
-将BPMN文件（如loan-approval.bpmn）放入 src/main/resources/processes 目录，Spring Boot启动时自动加载并部署。
-
-自定义流程引擎参数：
-
-yaml
-camunda.bpm:
-  database:
-    schema-update: true     # 自动更新数据库表结构
-  history-level: full       # 流程历史记录级别
-  job-execution:
-    enabled: true          # 启用异步任务执行
-4. 多环境配置
-通过Profile区分环境（示例）：
-
-yaml
-# application-dev.yaml（开发环境）
-cibseven:
-  api:
-    base-url: http://dev-api.cibseven.com/v1
-
-# application-prod.yaml（生产环境）
-cibseven:
-  api:
+  platform:
     base-url: https://api.cibseven.com/v1
-5. 安全配置建议
-Camunda管理账号：生产环境中必须修改默认账号密码
+    api-key: ${CIB_API_KEY:default_dev_key}  # 生产环境必须使用加密存储
+```
 
-CIB Seven密钥：通过Vault或环境变量注入敏感信息，避免明文存储
+### Camunda引擎配置
+```yaml
+camunda.bpm:
+  admin-user:  # 仅限开发环境使用
+    id: demo
+    password: demo
+  database:
+    schema-update: true  # 自动同步表结构
+  auto-deployment-enabled: true  # 自动部署BPMN流程
+```
 
-HTTPS加密：确保所有API通信启用TLS加密
+##  高级配置
 
-验证配置是否生效
-启动Spring Boot应用
+### 线程池优化
+```yaml
+spring:
+  task:
+    execution:
+      pool:
+        core-size: 10
+        max-size: 50
+        queue-capacity: 1000
+```
 
-访问 http://localhost:8080/camunda 登录控制台
+### 邮件服务集成
+```yaml
+spring:
+  mail:
+    host: smtp.cibseven.com
+    username: ${MAIL_USER}
+    password: ${MAIL_PASSWORD}  # 建议使用Jasypt加密
+```
 
-检查流程定义列表是否包含部署的BPMN流程
+##  常见问题
 
-调用CIB Seven接口时，通过日志确认连接参数正确性
+### 流程未自动部署
+**现象**：启动后未加载BPMN文件  
+ **解决方案**：
+1. 确认文件位于 `resources/processes/` 目录
+2. 检查文件扩展名为 `.bpmn`
+3. 验证配置：
+```yaml
+camunda.bpm:
+  auto-deployment-enabled: true  # 必须为true
+```
+
+### 管理员登录失败
+**现象**：无法访问Camunda控制台  
+ **解决方案**：
+```yaml
+# 生产环境配置
+camunda.bpm:
+  admin-user.id: ""  # 禁用内置账户
+  security:
+    filter-url: /engine-rest/*,/camunda/*
+```
+
+##  扩展阅读
+
+### 配置加密方案
+```yaml
+cibseven:
+  platform:
+    api-key: ENC(AbCdEfG123456)  # Jasypt加密值
+
+# 启动命令添加加密密钥
+java -jar app.jar --jasypt.encryptor.password=${ENCRYPT_KEY}
+```
+
+### 多环境配置示例
+```bash
+# 生产环境启动命令
+java -jar app.jar --spring.profiles.active=prod \
+                  --jasypt.encryptor.password=${PROD_KEY}
+```
+
+---
