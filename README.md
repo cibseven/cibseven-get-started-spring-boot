@@ -128,3 +128,4 @@ Configure Maven mirror source (edit ~/.m2/settings.xml):
     <name>阿里云仓库</name>
     <url>https://maven.aliyun.com/repository/public</url>
   </mirror>
+  .....
