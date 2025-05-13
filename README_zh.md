@@ -1,235 +1,4 @@
 
-# 测试 CIB seven 集成 <!-- by 刘仁炽 -->
-## 测试目的
-验证 CIB seven 集成是否正常工作，包括流程定义的部署以及流程实例的启动等关键功能，确保系统在集成 CIB seven 后能够按照预期运行，各组件之间的交互正常。
-## 测试环境
-- 操作系统：[Windows 10  ]
-- 开发工具：[IntelliJ IDEA 2022.3.2]
-- 运行环境：[JDK 11、Spring Boot 2.6.7、Camunda BPM 7.15.0]
-- 数据库：[H2 数据库 2.1.210]
-- 验证 CIB seven 集成是否正常工作，包括流程定义的部署以及流程实例的启动等关键功能，确保系统在集成 CIB seven 后能够按照预期运行，各组件之间的交互正常。
-## 测试步骤
-1. 创建测试类：在 src/main/java/org/cibseven/getstarted/loanapproval/ 路径下创建 LoanApprovalIntegrationTest.java 文件，用于编写具体的集成测试代码。
-2. 编写测试代码：
-```bash
-package org.cibseven.getstarted.loanapproval;
-
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-public class PostDeployIntegrationTest {
-
-    @Autowired
-    private RuntimeService runtimeService;
-
-    @Test
-    public void shouldStartProcessAfterDeployment() throws Exception {
-        // 等待应用完全启动并触发 PostDeployEvent
-        Thread.sleep(5000); // 简单等待，实际测试中可使用更优雅的等待机制
-        
-        // 验证是否已启动流程实例
-        List<ProcessInstance> instances = runtimeService
-                .createProcessInstanceQuery()
-                .processDefinitionKey("loanApproval")
-                .list();
-        
-        assertThat(instances).isNotEmpty();
-        assertThat(instances.size()).isEqualTo(1);
-    }
-}
-```
-3. 在pom.xml添加依赖
-```bash
-<dependency>
-    <groupId>org.assertj</groupId>
-    <artifactId>assertj-core</artifactId>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-engine</artifactId>
-    <scope>test</scope>
-</dependency>
-```
-
-4. 配置测试环境：在 src/test/resources 目录下的 application.yaml 文件中添加以下配置信息：
-```bash
-spring.datasource.url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
-spring.datasource.driver-class-name=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
-camunda.bpm.auto-deployment-enabled=false
-logging.level.org.camunda.bpm=DEBUG
-```
-5. 执行测试：使用 IDE 的测试运行器运行 LoanApprovalIntegrationTest 类中的测试方法；或者使用项目构建工具（如 Maven 的 mvn test 命令来执行测试。
-
-## 预期结果
-- shouldDeployProcessDefinition 测试方法中，能够获取到键为 "loanApproval" 的流程定义，断言验证流程定义不为空，测试通过。
-- shouldStartProcessInstance 测试方法中，能够成功启动键为 "loanApproval" 的流程实例，断言验证流程实例不为空且流程定义 ID 不为空，测试通过。
-
-使用教程 - 配置
-杨文华
-贡献范围：核心配置项解析、Camunda集成配置、CIB Seven服务连接、多环境管理
-
-```markdown
-# CIBSeven 集成配置中心
-
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1-green.svg)](https://spring.io/projects/spring-boot)
-
-##  系统特性
-
--  **开箱即用**：预配置Camunda流程引擎与CIB Seven服务连接
--  **安全通信**：支持AES256加密与敏感信息加密存储
--  **多环境管理**：dev/test/prod环境配置一键切换
--  **监控就绪**：集成Spring Actuator健康检查与指标监控
--  **自动部署**：BPMN流程定义文件自动加载机制
-
-##  快速开始
-
-### 环境要求
-- JDK 17+
-- Camunda 7.18+
-- MySQL 8.0+ / PostgreSQL 14+
-
-### 启动步骤
-1. 克隆配置仓库
-```bash
-git clone https://github.com/yourorg/cibseven-config.git
-```
-
-2. 配置环境变量
-```bash
-export CIB_API_KEY=your_development_key
-export MAIL_PASSWORD=your_smtp_password
-```
-
-3. 启动开发环境
-```bash
-mvn spring-boot:run -Dspring.profiles.active=dev
-```
-
-##  系统架构
-
-```mermaid
-graph TD
-    A[应用服务] --> B{环境配置}
-    B -->|dev| C[开发配置]
-    B -->|prod| D[生产配置]
-    C --> E[自动部署流程]
-    D --> F[加密通信]
-    E --> G[Camunda引擎]
-    F --> H[CIB Seven平台]
-```
-
-##  配置指南
-
-### 基础配置
-```yaml
-# application.yaml
-server:
-  port: 8080
-spring:
-  application:
-    name: cibseven-integration
-  profiles:
-    active: dev  # 默认开发环境
-
-cibseven:
-  platform:
-    base-url: https://api.cibseven.com/v1
-    api-key: ${CIB_API_KEY:default_dev_key}  # 生产环境必须使用加密存储
-```
-
-### Camunda引擎配置
-```yaml
-camunda.bpm:
-  admin-user:  # 仅限开发环境使用
-    id: demo
-    password: demo
-  database:
-    schema-update: true  # 自动同步表结构
-  auto-deployment-enabled: true  # 自动部署BPMN流程
-```
-
-##  高级配置
-
-### 线程池优化
-```yaml
-spring:
-  task:
-    execution:
-      pool:
-        core-size: 10
-        max-size: 50
-        queue-capacity: 1000
-```
-
-### 邮件服务集成
-```yaml
-spring:
-  mail:
-    host: smtp.cibseven.com
-    username: ${MAIL_USER}
-    password: ${MAIL_PASSWORD}  # 建议使用Jasypt加密
-```
-
-##  常见问题
-
-### 流程未自动部署
-**现象**：启动后未加载BPMN文件  
- **解决方案**：
-1. 确认文件位于 `resources/processes/` 目录
-2. 检查文件扩展名为 `.bpmn`
-3. 验证配置：
-```yaml
-camunda.bpm:
-  auto-deployment-enabled: true  # 必须为true
-```
-
-### 管理员登录失败
-**现象**：无法访问Camunda控制台  
- **解决方案**：
-```yaml
-# 生产环境配置
-camunda.bpm:
-  admin-user.id: ""  # 禁用内置账户
-  security:
-    filter-url: /engine-rest/*,/camunda/*
-```
-
-##  扩展阅读
-
-### 配置加密方案
-```yaml
-cibseven:
-  platform:
-    api-key: ENC(AbCdEfG123456)  # Jasypt加密值
-
-# 启动命令添加加密密钥
-java -jar app.jar --jasypt.encryptor.password=${ENCRYPT_KEY}
-```
-
-### 多环境配置示例
-```bash
-# 生产环境启动命令
-java -jar app.jar --spring.profiles.active=prod \
-                  --jasypt.encryptor.password=${PROD_KEY}
-```
-
----
-
-
 CIB Seven Spring Boot 项目安装部署指南
 <!--覃雄伟-->
 1. 环境准备
@@ -609,18 +378,18 @@ mysqldump -u username -p cibseven_db > cibseven_backup_$(date +%F).sql
 
 mysql -u username -p cibseven_db < cibseven_backup_2023-01-01.sql
 
-   CIB Seven 平台与 Spring Boot 集成项目简介
-项目背景
+   # CIB Seven 平台与 Spring Boot 集成项目简介
+## 项目背景
 随着企业数字化转型的加速，对高效、灵活且可扩展的技术架构需求日益增长。CIB Seven 平台作为企业内部的重要业务支撑系统，需要与现代开发框架和技术进行深度集成，以提升开发效率、系统性能和可维护性。Spring Boot 作为当前流行的 Java 开发框架，以其简洁的配置、丰富的生态和强大的性能，成为企业应用开发的首选。
 
-项目目标
+## 项目目标
 本项目旨在将 CIB Seven 平台与 Spring Boot 框架进行深度集成，实现以下目标：
 
 提升开发效率：利用 Spring Boot 的自动配置和快速开发特性，减少开发人员的配置和编码工作，加速项目交付。
 增强系统性能：通过 Spring Boot 的性能优化和异步处理机制，提升系统的响应速度和吞吐量。
 提高可维护性：借助 Spring Boot 的模块化设计和丰富的生态工具，简化系统维护和升级过程。
 促进技术创新：引入 Spring Boot 的新技术和新特性，推动 CIB Seven 平台的技术创新和业务创新。
-集成内容
+## 集成内容
 本项目主要涵盖以下几个方面的集成：
 
 基础框架集成：将 Spring Boot 作为 CIB Seven 平台的基础开发框架，替代原有的开发框架，实现快速开发和高效运维。
@@ -629,15 +398,13 @@ mysql -u username -p cibseven_db < cibseven_backup_2023-01-01.sql
 消息队列集成：引入 RabbitMQ、Kafka 等消息队列中间件，实现系统间的异步通信和解耦，提高系统的可扩展性和可靠性。
 缓存集成：集成 Redis、Ehcache 等缓存中间件，提升系统的性能和响应速度，减少数据库访问压力。
 日志管理集成：利用 Spring Boot 的日志管理框架，如 Logback 或 Log4j2，实现日志的统一管理和分析。
-预期成果
+## 预期成果
 通过本项目的实施，预期将取得以下成果：
 
 开发效率显著提升：开发人员能够更快速地完成业务功能的开发和测试，缩短项目交付周期。
 系统性能明显增强：系统的响应速度和吞吐量得到显著提升，满足企业高并发、高负载的业务需求。
 可维护性大幅提高：系统的模块化和可配置性得到增强，降低维护成本，提高系统的可扩展性和可复用性。
 技术创新持续推动：引入新技术和新特性，推动 CIB Seven 平台的技术创新和业务创新，提升企业的竞争力。
-总结
+## 总结
 CIB Seven 平台与 Spring Boot 的集成项目是企业数字化转型的重要一步。通过深度集成，将充分发挥 Spring Boot 的技术优势，提升 CIB Seven 平台的开发效率、系统性能和可维护性，为企业的持续发展提供强有力的技术支撑。
-
-
 
