@@ -1,151 +1,378 @@
-安装部署说明
+CIB Seven Spring Boot 项目安装部署指南
 <!--覃雄伟-->
 1. 环境准备
 1.1 系统要求
-操作系统: Windows 10/11, macOS 10.15+, 或 Linux (Ubuntu 20.04+推荐)
+操作系统: Windows 10+/Linux/macOS
 
-Java 开发环境: JDK 17+
+Java: JDK 17 或更高版本
 
-构建工具: Maven 3.8+
+构建工具: Maven 3.6+ 或 Gradle 7.x
 
-版本控制: Git 2.30+
+数据库: MySQL 5.7+/PostgreSQL 12+ (根据项目配置)
 
-数据库: MySQL 8.0 或 PostgreSQL 13+ (可选，根据实际配置)
+可选工具: Camunda Modeler (用于编辑BPMN文件)
 
-1.2 开发工具安装
-安装JDK 17:
+1.2 安装必要软件
+Java 安装
 
-从Oracle官网下载
+# Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install openjdk-17-jdk
 
-设置JAVA_HOME环境变量
+# Windows
+# 从 https://adoptium.net/ 下载并安装JDK 17
 
-安装Maven:
+# 验证安装
+java -version
+Maven 安装
 
-# Linux/macOS
+# Linux (Ubuntu/Debian)
 sudo apt install maven
-# 或从官网下载二进制包
 
 # Windows
-# 从https://maven.apache.org/download.cgi下载并配置PATH
-安装Git:
+# 从 https://maven.apache.org/download.cgi 下载并安装
 
-# Linux
-sudo apt install git
-
-# macOS
-brew install git
-
-# Windows
-# 从https://git-scm.com/download/win下载安装
+# 验证安装
+mvn -v
 
 <!--张佳-->
 2. 获取项目代码
 2.1 克隆仓库
 
-git clone https://github.com/your-organization/your-repository.git
-cd your-repository
+git clone https://github.com/your-repository/cibseven-springboot-project.git
+cd cibseven-springboot-project
 2.2 检查分支
 
-git checkout main  # 或指定分支
-3. 项目配置
-3.1 配置文件修改
-编辑src/main/resources/application.yaml:
+git branch -a
+git checkout main  # 或适当的分支
+3. 数据库配置
+3.1 创建数据库
+查看 application.yaml 配置
 
-
-server:
-  port: 8080  # 根据需要修改端口
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/your_db
+    url: jdbc:mysql://localhost:3306/seven_spring_db?useSSL=false&characterEncoding=utf8
+    username: springuser
+    password: springpass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+创建数据库
+
+
+-- 通过 MySQL 客户端执行
+CREATE DATABASE IF NOT EXISTS seven_spring_db 
+DEFAULT CHARACTER SET utf8mb4 
+DEFAULT COLLATE utf8mb4_unicode_ci;
+创建数据库用户并授权
+
+
+CREATE USER 'springuser'@'%' IDENTIFIED BY 'springpass';
+GRANT ALL PRIVILEGES ON seven_spring_db.* TO 'springuser'@'%';
+FLUSH PRIVILEGES;
+PostgreSQL 版本示例：
+
+
+CREATE DATABASE seven_spring_db 
+ENCODING 'UTF8' 
+LC_COLLATE 'en_US.UTF-8' 
+LC_CTYPE 'en_US.UTF-8';
+
+CREATE USER springuser WITH PASSWORD 'springpass';
+GRANT ALL PRIVILEGES ON DATABASE seven_spring_db TO springuser;
+4. 项目配置
+4.1 配置文件修改
+编辑 src/main/resources/application.yaml:
+
+
+# 数据库配置
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/cibseven_db
     username: your_username
     password: your_password
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
+# CIB Seven 平台配置
 cibseven:
   api:
     base-url: https://api.cibseven.org/v1
-    key: your-api-key
-3.2 数据库设置 (如需要)
-创建数据库:
+    api-key: your_api_key_here
+    timeout: 5000
+
+# Camunda 配置
+camunda:
+  bpm:
+    database:
+      schema-update: true
+    admin-user:
+      id: admin
+      password: admin
+4.2 环境变量配置 (可选)
+可以设置以下环境变量替代配置文件中的敏感信息:
 
 
-CREATE DATABASE your_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-运行初始化脚本 (如有)
+export SPRING_DATASOURCE_PASSWORD=your_db_password
+export CIBSVEN_API_KEY=your_api_key
+5. 构建项目
+5.1 使用 Maven 构建
+
+mvn clean install -DskipTests
+5.2 构建 Docker 镜像 (可选)
+如果项目包含 Dockerfile:
+
+
+docker build -t cibseven-app:1.0 .
 
 <!--覃雄伟-->
-4. 构建项目
-4.1 使用Maven构建
-
-mvn clean install
-4.2 解决依赖问题
-如遇到依赖下载失败:
-
-mvn clean install -U
-5. 运行项目
-5.1 开发模式运行
+6. 部署项目
+6.1 本地运行
 
 mvn spring-boot:run
-5.2 生产环境部署
-打包应用:
 
-
-mvn clean package -DskipTests
-运行JAR文件:
-
-
-java -jar target/your-application.jar
-使用PM2管理 (可选):
-
-
-npm install pm2 -g
-pm2 start "java -jar target/your-application.jar" --name your-app
-
-
-6. 验证安装
-6.1 检查运行状态
-访问: http://localhost:8080/actuator/health (默认端口)
-
-应返回:
-
-
-{"status":"UP"}
-6.2 测试API端点
-使用Postman或curl测试API:
-
-
-curl http://localhost:8080/api/v1/process/start
-
-<!--张佳-->
-7. 部署到服务器
-7.1 Docker部署 (推荐)
-构建Docker镜像:
-
-docker build -t your-app .
-运行容器:
-
-
-docker run -p 8080:8080 -d your-app
-7.2 传统服务器部署
-复制JAR文件到服务器
-
-创建systemd服务:
+# 或者运行打包后的JAR
+java -jar target/cibseven-getstarted-1.0.0.jar
+6.2 生产环境部署
+使用 Systemd (Linux)
+创建服务文件 /etc/systemd/system/cibseven.service:
 
 
 [Unit]
-Description=Your Spring Boot App
-After=syslog.target
+Description=CIB Seven Spring Boot Application
+After=syslog.target network.target
 
 [Service]
 User=appuser
-ExecStart=/usr/bin/java -jar /path/to/your-application.jar
+WorkingDirectory=/opt/cibseven
+ExecStart=/usr/bin/java -jar /opt/cibseven/cibseven-getstarted-1.0.0.jar
 SuccessExitStatus=143
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
-启动服务:
+然后启用并启动服务:
 
 
 sudo systemctl daemon-reload
-sudo systemctl enable your-app
-sudo systemctl start your-app
+sudo systemctl enable cibseven
+sudo systemctl start cibseven
+使用 Docker Compose
+创建 docker-compose.yml:
+
+
+version: '3.8'
+
+services:
+  cibseven-app:
+    image: cibseven-app:1.0
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/cibseven_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=dbpassword
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=dbpassword
+      - MYSQL_DATABASE=cibseven_db
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:
+启动服务:
+
+
+docker-compose up -d
+6.3部署 BPMN 模型
+部署 BPMN（Business Process Model and Notation）模型通常涉及将设计好的业务流程模型（以 .bpmn 文件格式）加载到流程引擎中，使其能够执行和管理流程实例。以下是详细的部署步骤和注意事项：
+
+1. 设计并验证 BPMN 模型
+工具选择：使用 BPMN 设计工具（如 Camunda Modeler、Signavio、Eclipse BPMN2 Modeler）创建或编辑 BPMN 2.0 标准的流程图。
+
+验证模型：确保模型语法正确（如任务、网关、事件等元素是否符合 BPMN 规范），并导出为 .bpmn 或 .bpmn20.xml 文件。
+
+2. 选择流程引擎
+选择一个支持 BPMN 2.0 的流程引擎来部署和执行模型。常见的开源引擎包括：
+
+Camunda Platform：适合复杂业务流程，提供丰富的管理和监控工具。
+
+Flowable：轻量级引擎，支持快速集成。
+
+Activiti：由 Alfresco 维护的经典引擎。
+
+jBPM：基于 Java 的流程引擎，与 Red Hat 工具链集成。
+
+3. 部署到流程引擎
+以 Camunda 为例
+安装流程引擎：
+
+下载 Camunda 社区版。
+
+可嵌入到 Java 应用（如 Spring Boot），或独立部署到 Tomcat/JBoss 服务器。
+
+部署 BPMN 模型：
+
+通过 REST API：
+
+
+curl -X POST \
+  "http://localhost:8080/engine-rest/deployment/create" \
+  -H "Content-Type: multipart/form-data" \
+  -F "deployment-name=my-process" \
+  -F "deployment-source=local" \
+  -F "deploy-changed-only=true" \
+  -F "my-process.bpmn=@/path/to/your/model.bpmn"
+通过管理界面：
+访问 http://localhost:8080/camunda/app/welcome/，登录后进入 Cockpit，上传 .bpmn 文件。
+
+通过代码（Java/Spring Boot）：
+
+
+@Autowired
+private RepositoryService repositoryService;
+
+public void deployProcess() {
+  repositoryService.createDeployment()
+    .addClasspathResource("processes/my-process.bpmn")
+    .name("My Process Deployment")
+    .deploy();
+
+<!--张佳-->
+}7. 验证部署
+7.1 检查应用状态
+
+curl http://localhost:8080/actuator/health
+预期输出:
+
+
+{"status":"UP"}
+7.2 访问应用接口
+Swagger UI (如果已配置): http://localhost:8080/swagger-ui.html
+
+Camunda Tasklist: http://localhost:8080/camunda/app/tasklist
+
+8. 常见问题解决
+8.1 数据库连接问题
+错误信息: Cannot create connection to database server
+
+解决方案:
+
+1. 基础检查
+(1) 数据库服务是否运行？
+本地数据库：检查数据库服务是否启动。
+
+
+# MySQL
+systemctl status mysql     # Linux
+sudo /usr/local/mysql/support-files/mysql.server status  # macOS
+
+# PostgreSQL
+systemctl status postgresql
+远程数据库：确认目标服务器IP和端口是否可访问。
+
+
+telnet <数据库IP> 3306    # 测试MySQL端口连通性
+nc -zv <数据库IP> 5432    # 测试PostgreSQL端口
+(2) 连接参数是否正确？
+检查 application.properties 中的配置：
+
+URL格式：确保JDBC URL正确（注意数据库名、端口、SSL配置）。
+
+
+# 正确示例（MySQL）
+spring.datasource.url=jdbc:mysql://localhost:3306/cibseven_db?useSSL=false&serverTimezone=UTC
+如果数据库名包含特殊字符（如 -），需用反引号包裹：`cib-seven-db`。
+
+用户名/密码：确保无拼写错误，密码是否包含特殊字符（如 @ 需转义为 %40）。
+
+8.2 CIB Seven API 认证失败
+错误信息: 401 Unauthorized
+
+解决方案:
+
+1. 检查API凭证
+核对密钥/令牌：确认 API Key、Client ID、Secret Key 是否与CIB Seven提供的完全一致（注意大小写、空格或特殊字符）。
+
+权限和有效期：确认密钥未被禁用、未过期，且拥有目标API的访问权限。
+
+认证方式：检查文档是否要求特定认证方式（如 OAuth 2.0、Bearer Token、Basic Auth）。
+
+2. 验证请求头（Headers）
+Authorization头格式：
+
+确保使用正确的格式，例如：
+
+
+Authorization: Bearer <your_token>
+检查是否遗漏Bearer关键字或Token拼接错误。
+
+其他必要头字段：
+
+确认是否遗漏 Content-Type（如 application/json）、X-API-Key 等自定义头。
+
+8.3 BPMN 部署失败
+错误信息: Failed to deploy BPMN model
+
+解决方案:
+
+1. 检查BPMN模型合法性
+语法错误：确保BPMN文件符合BPMN 2.0规范。
+
+使用BPMN Validator或IDE插件（如Camunda Modeler、Eclipse BPMN2插件）检查模型。
+
+常见错误：未闭合的网关、缺失的任务定义、无效的连线（Sequence Flow）等。
+
+XML格式问题：检查BPMN文件是否为有效XML。
+
+使用XML验证工具（如XML Lint）检查标签闭合和属性合法性。
+
+重复的ID：确保所有元素的id唯一，避免重复。
+
+特殊字符：检查id或name中是否包含非法字符（如空格、特殊符号）。
+
+2. 检查部署配置
+资源路径：确认部署时指定的BPMN文件路径正确（绝对路径或相对路径）。
+
+权限问题：确保部署用户对目标目录和文件有读写权限。
+
+数据库连接：
+
+检查数据库是否可达（如MySQL、PostgreSQL等）。
+
+验证数据库用户权限（如Camunda引擎需要create和alter表的权限）。
+
+引擎配置：
+
+对于Camunda，检查processes.xml或bpm-platform.xml中的自动部署配置。
+
+确保引擎版本与BPMN模型兼容（例如，某些新语法需要高版本引擎支持）。
+
+<!--覃雄伟-->
+9. 升级指南
+拉取最新代码:
+
+
+git pull origin main
+重新构建项目:
+
+
+mvn clean install
+重启服务:
+
+
+sudo systemctl restart cibseven
+# 或
+docker-compose up -d --build
+
+10. 备份与恢复
+10.1 数据库备份
+
+mysqldump -u username -p cibseven_db > cibseven_backup_$(date +%F).sql
+10.2 恢复数据库
+
+mysql -u username -p cibseven_db < cibseven_backup_2023-01-01.sql
