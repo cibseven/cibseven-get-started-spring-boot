@@ -261,6 +261,104 @@ camunda.bpm:
 
 License: The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
 
+
+
+
+## Advanced Feature Exploration <!-- by 李杰东 -->
+
+This section demonstrates advanced capabilities beyond basic Spring Boot usage, focusing on enterprise-grade enhancements.
+
+### 1. Enterprise-Grade Security Hardening <!-- by 李杰东 -->
+Implement OAuth2.0 + JWT authentication flow for API protection.
+
+**Technical Stack**:
+- Spring Security 6.x
+- JJWT (Java JWT Library)
+- OAuth2 Resource Server
+
+**Configuration Steps**:
+```yaml
+# application.yml (security configuration)
+security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: https://auth-server.example.com <!-- [AI建议] 配置权威认证源 -->
+        jwk-set-uri: ${issuer-uri}/.well-known/jwks.json
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+        return http.build();
+
+    }
+}
+
+@RestController
+public class ReactiveController {
+    private final SensorRepository repository;
+
+    public ReactiveController(SensorRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<SensorData> streamData() {
+        return repository.findAll()
+            .delayElements(Duration.ofMillis(500))
+            .log("sensor-stream", Level.FINE);
+    }
+}
+
+
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-sleuth</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+</dependency>
+
+
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0 <!-- Full sampling for demo purposes -->
+
+
+      chaos:
+  monkey:
+    enabled: true
+    assaults:
+      - level: 5
+        latencyRangeStart: 1000
+        latencyRangeEnd: 5000
+        latencyActive: true
+
+
+        # Optimal GC settings for 8GB heap
+-XX:+UseG1GC
+-XX:MaxGCPauseMillis=200
+-XX:InitiatingHeapOccupancyPercent=35
+
+
+spring:
+  cache:
+    cache-names: productCache,userCache
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+
 # Test CIB seven Integration <!-- by 刘仁炽 -->
 ## Test Objectives
 Verify whether the CIB seven integration works properly, including key functions such as the deployment of process definitions and the start of process instances. Ensure that the system can operate as expected after integrating CIB seven, and the interaction between various components is normal.
@@ -693,6 +791,7 @@ mysqldump -u username -p cibseven_db > cibseven_backup_$(date +%F).sql
 10.2 Database Restore
 
 mysql -u username -p cibseven_db < cibseven_backup_2023-01-01.sql
+
 
 
 
