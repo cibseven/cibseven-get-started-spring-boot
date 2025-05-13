@@ -1,42 +1,18 @@
-# CIB seven - Getting Started with CIB seven and Spring Boot
+## 高级功能探索 <!-- by 李杰东 -->
 
-This Repository contains the example Spring Boot application for the guide at [docs.cibseven.org](https://docs.cibseven.org/get-started/spring-boot/).
+本章节展示超越基础功能的Spring Boot企业级增强能力，聚焦生产环境实战场景。
 
-This project requires Java 17.
+### 1. 企业级安全加固方案 <!-- by 李杰东 -->
+实现OAuth2.0+JWT认证体系，构建API安全防护网。
 
-Every step of the tutorial was tagged in this repository. You can jump to the final state of each step
-by the following command:
-
-```
-git checkout -f Step-X
-```
-
-If you want to follow the tutorial along please clone this repository and checkout the `Start` tag.
-
-```
-git clone https://github.com/cibseven/cibseven-get-started-spring-boot.git
-git checkout -f Start
-```
-
-License: The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
-
-
-
-## Advanced Feature Exploration <!-- by 李杰东 -->
-
-This section demonstrates advanced capabilities beyond basic Spring Boot usage, focusing on enterprise-grade enhancements.
-
-### 1. Enterprise-Grade Security Hardening <!-- by 李杰东 -->
-Implement OAuth2.0 + JWT authentication flow for API protection.
-
-**Technical Stack**:
+**技术栈**：
 - Spring Security 6.x
-- JJWT (Java JWT Library)
-- OAuth2 Resource Server
+- JJWT令牌库
+- OAuth2资源服务器
 
-**Configuration Steps**:
+**配置步骤**：
 ```yaml
-# application.yml (security configuration)
+# application.yml 安全配置片段
 security:
   oauth2:
     resourceserver:
@@ -44,7 +20,8 @@ security:
         issuer-uri: https://auth-server.example.com <!-- [AI建议] 配置权威认证源 -->
         jwk-set-uri: ${issuer-uri}/.well-known/jwks.json
 
-@Configuration
+
+        @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
@@ -56,9 +33,9 @@ public class SecurityConfig {
             )
             .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
-
     }
 }
+
 
 @RestController
 public class ReactiveController {
@@ -92,9 +69,9 @@ spring:
     base-url: http://localhost:9411
   sleuth:
     sampler:
-      probability: 1.0 <!-- Full sampling for demo purposes -->
+      probability: 1.0 <!-- 演示用全量采样 -->
 
-
+      
       chaos:
   monkey:
     enabled: true
@@ -105,7 +82,7 @@ spring:
         latencyActive: true
 
 
-        # Optimal GC settings for 8GB heap
+        # 8GB堆内存优化配置
 -XX:+UseG1GC
 -XX:MaxGCPauseMillis=200
 -XX:InitiatingHeapOccupancyPercent=35
@@ -116,5 +93,3 @@ spring:
     cache-names: productCache,userCache
     caffeine:
       spec: maximumSize=500,expireAfterAccess=600s
-
-
