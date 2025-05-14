@@ -1,38 +1,17 @@
-# CIB seven - Getting Started with CIB seven and Spring Boot
 
-This Repository contains the example Spring Boot application for the guide at [docs.cibseven.org](https://docs.cibseven.org/get-started/spring-boot/).
+<!--韩辉-->
+#    Introduction to the Integration Project of CIB Seven Platform and Spring Boot
+## project background
+With the acceleration of enterprise digital transformation, the demand for efficient, flexible, and scalable technology architecture is increasing day by day. As an important business support system wiSSthin the enterprise, the CIB Seven platform needs to be deeply integrated with modern development frameworks and technologies to improve development efficiency, system performance, and maintainability. Spring Boot, as a popular Java development framework, has become the preferred choice for enterprise application development due to its simple configuration, rich ecosystem, and powerful performance.
 
-This project requires Java 17.
-
-Every step of the tutorial was tagged in this repository. You can jump to the final state of each step
-by the following command:
-
-```
-git checkout -f Step-X
-```
-
-If you want to follow the tutorial along please clone this repository and checkout the `Start` tag.
-
-```
-git clone https://github.com/cibseven/cibseven-get-started-spring-boot.git
-git checkout -f Start
-```
-
-License: The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
-——————
-#韩辉
-    Introduction to the Integration Project of CIB Seven Platform and Spring Boot
-project background
-With the acceleration of enterprise digital transformation, the demand for efficient, flexible, and scalable technology architecture is increasing day by day. As an important business support system within the enterprise, the CIB Seven platform needs to be deeply integrated with modern development frameworks and technologies to improve development efficiency, system performance, and maintainability. Spring Boot, as a popular Java development framework, has become the preferred choice for enterprise application development due to its simple configuration, rich ecosystem, and powerful performance.
-
-Project objectives
+## Project objectives
 This project aims to deeply integrate the CIB Seven platform with the Spring Boot framework to achieve the following goals:
 
 Improve development efficiency: Utilize the automatic configuration and rapid development features of Spring Boot to reduce developers' configuration and coding work, and accelerate project delivery.
 Enhance system performance: Improve system response speed and throughput through Spring Boot's performance optimization and asynchronous processing mechanism.
 Improve maintainability: With the modular design and rich ecosystem tools of Spring Boot, simplify the system maintenance and upgrade process.
 Promote technological innovation: Introduce new technologies and features of Spring Boot to drive technological and business innovation on the CIB Seven platform.
-Integrated Content
+## Integrated Content
 This project mainly covers the integration of the following aspects:
 
 Basic framework integration: Spring Boot is used as the basic development framework for the CIB Seven platform, replacing the original development framework to achieve rapid development and efficient operation and maintenance.
@@ -41,12 +20,803 @@ Security Framework Integration: Integrate security frameworks such as Spring Sec
 Message queue integration: Introducing message queue middleware such as RabbitMQ and Kafka to achieve asynchronous communication and decoupling between systems, improving system scalability and reliability.
 Cache integration: Integrate Redis, Ehcache and other caching middleware to improve system performance and response speed, and reduce database access pressure.
 Log management integration: Utilize Spring Boot's log management framework, such as Logback or Log4j2, to achieve unified management and analysis of logs.
-expected results
-Through the implementation of this project, it is expected to achieve the following results:
+## expected results
+### Through the implementation of this project, it is expected to achieve the following results:
 
 Significant improvement in development efficiency: Developers can complete business function development and testing more quickly, shortening project delivery cycles.
 The system performance has been significantly enhanced: the response speed and throughput of the system have been significantly improved, meeting the high concurrency and high load business needs of enterprises.
 Significant improvement in maintainability: The modularity and configurability of the system have been enhanced, reducing maintenance costs and improving the scalability and reusability of the system.
 Continuous promotion of technological innovation: Introducing new technologies and features to drive technological and business innovation on the CIB Seven platform, enhancing the competitiveness of enterprises.
+
+## summarize
+The integration project between CIB Seven platform and Spring Boot is an important step in the digital transformation of enterprises. Through deep integration, the technical advantages of Spring Boot will be fully utilized to enhance the development efficiency, system performance, and maintainability of the CIB Seven platform, providing strong technical support for the sustainable development of enterprises.
+
 summarize
 The integration project between CIB Seven platform and Spring Boot is an important step in the digital transformation of enterprises. Through deep integration, the technical advantages of Spring Boot will be fully utilized to enhance the development efficiency, system performance, and maintainability of the CIB Seven platform, providing strong technical support for the sustainable development of enterprises.
+
+
+《————Liu Yichang————》
+Modeling and Process Configuration
+Project Structure Conceptual Modeling
+Adopt a tree structure to precisely represent the project's file and directory structure. Take the cibseven-get-started-spring-boot repository as the root node, list the src/main directory in detail. Further divide it into subdirectories like java and resources under src/main. Meanwhile, consider.gitignore, LICENSE, NOTICE, README.md, and pom.xml as first-level child nodes at the same level as src/main. This more detailed conceptual model can clearly and comprehensively display the basic constituent elements of the project, which greatly facilitates developers to understand the overall framework of the project. For example, developers can quickly locate the src/main/java directory where the business logic code is stored and the src/main/resources directory where configuration files and other resources are placed through this model. They can also quickly find the pom.xml file that manages project dependencies and build information.
+Version Control Modeling
+Use a directed graph to model the project's version control situation. Regard each commit as a node, and take the commit information (such as Step-3: deploy and invoke BPMN process, Step 1: setup a Spring Boot application project) as the attribute of the node. Use directed edges to represent the association relationship between commits. Starting from the initial commit (for example, Start: the start of the tutorial), developers can trace the development history of the project along the directed edges. Through this model, developers can check in which commit each functional feature was added and the dependency relationship between different commits, thus making it easier to manage versions and trace problems.
+Technical Selection Data Modeling
+A concise data model can be constructed to describe the project's technical selection. For instance, define an entity "Project Technical Stack" which has attributes such as "Programming Language" (with a value of Java 17) and "Build Tool" (it can be inferred as Maven based on the pom.xml file). This model helps developers quickly grasp the technical environment on which the project depends. When expanding or maintaining the project, they can accurately determine the technical direction.
+Process Configuration
+Project Initialization Process
+First, check whether Java 17 is installed in the local development environment. If it is not installed, install it according to the guidance of the official documentation.
+Open the command-line tool and execute the command git clone https://github.com/cibseven/cibseven-get-started-spring-boot.git to clone the project repository locally.
+Then execute git checkout -f Start to switch to the initial development state and get ready for subsequent development according to the tutorial.
+Tutorial Learning and Practice Process
+According to the sequence of tutorial chapters, from the first step, execute git checkout -f Step-X (X is the number corresponding to the current tutorial step) in the command line to switch to the corresponding code state.
+Refer to the external documentation (the guide on docs.cibseven.org), and combine it with the current code state to understand the development objectives and implementation ideas of each step.
+Analyze and learn the code in the local development environment. If possible, conduct debugging to deeply understand the code logic. After completing the study of the current step, switch to the next step and continue learning.
+Project Building and Deployment Process (assuming Maven is used)
+Enter the root directory of the project and open the command-line tool.
+Execute the mvn clean install command. Maven will download the relevant dependency packages according to the dependency configuration in the pom.xml file, and compile, test, and package the project.
+After the packaging is completed, deploy the generated executable file (such as a JAR package) to the corresponding server environment, like a local test server or a production server, according to the project's deployment requirements. During the deployment process, it may be necessary to configure the running environment of the server, such as JVM parameters.
+=======
+Spring Boot quick start project template, a full-process toolchain that supports enterprise-level application development.
+
+
+<!--刘任炽-->
+## Functional Features
+
+### Core Module
+- **Pre-configured Maven Build**
+  - Built-in Spring Boot 3.1.5, Spring Web 6.0.13, Spring Data JPA 3.1.5
+  - Integrated Lombok 1.18.28 to simplify POJO development
+  - Automatically generated `.gitignore` and `HELP.md` files
+- **Example REST API Interface**
+  - `/api/v1/hello` (GET): Returns a welcome message in JSON format
+  - `/api/v1/users` (POST): User registration API (see example request body below)
+  - Global exception handling: supports status codes such as `404` (resource not found), `500` (server error), etc.
+- **Security and Monitoring**
+  - Integrated Spring Security 6.1.5 basic configuration
+  - Actuator endpoints open `/health` and `/info`
+### DevOps Integration
+- **CI/CD Pipeline**
+  - GitHub Actions Configuration:
+  - `build.yml`: Automatically compiles and runs unit tests
+  - `codeql-analysis.yml`: Code security scanning (triggered weekly)
+  - SonarQube code quality inspection (needs to configure `sonar-project.properties` yourself)
+- **Containerization Support**
+  - Multi-stage build `Dockerfile` (optimized image size to <150MB)
+  - `docker-compose.yml` template integrating PostgreSQL and Redis
+### Development Tools
+  - Pre-configured Swagger UI documentation (access path: `/swagger-ui.html`)
+  - H2 in-memory database configuration (enabled by default in the development environment)
+  - Flyway database migration script template (located in `src/main/resources/db/migration`)
+## Environmental Requirements
+### Necessary Tools
+|   Tool Name    | Minimum Version |   Verification Command   |
+|----------------|------------|---------------------------|  
+| Java           | 17         | `java -version`           |  
+| Maven          | 3.8.6      | `mvn -v`                  | 
+
+### Optional Tools
+| Tool Name | Recommended Version | Purpose Description |
+|----------------|------------|---------------------------|  
+| Docker         | 24.0.6     | Containerized deployment     |  
+| PostgreSQL     | 15.3       | Production environment database  |  
+| IntelliJ IDEA  | 2023.2     |IDE integrated support       |
+
+## Installation and Quick Start
+### Basic Deployment
+### Basic Deployment
+1. Clone the repository and enter the directory:
+     ```bash
+   git clone https://github.com/cibseven/cibseven-get-started-springboot.git
+   cd cibseven-get-started-springboot
+Compilation project:
+bash
+mvn clean install -DskipTests 
+
+Start the application:
+bash
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+Verify running statusCheck health status:
+bash
+curl http://localhost:8080/actuator/health
+Expected output: {"status":"UP"}
+
+Test example interface:
+bash
+# Example of a GET request
+curl http://localhost:8080/api/v1/hello
+# POST request example (User registration)
+curl -X POST -H "Content-Type: application/json" \
+-d '{"name":"testUser", "email":"test@example.com"}' \
+http://localhost:8080/api/v1/users
+Advanced Configuration
+Environment variable override
+Variable name     default value      application scenario
+SPRING_DATASOURCE_URL jdbc:h2:mem:test, replace with the PostgreSQL connection string for the production environment.
+LOGGING_LEVEL_ROOT INFO can be set to DEBUG during debugging
+Docker Production Deployment
+
+Building the image:
+bash
+docker build --build-arg JAR_FILE=target/*.jar -t springboot-prod .
+
+Running container (binding to external database):
+bash
+docker run -d -p 8080:8080 \
+-e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/mydb \
+springboot-prod
+
+Multi-environment configuration
+application-dev.properties: Development environment (default activated)
+application-prod.properties: Production environment (requires activation through -Dspring.profiles.active=prod)
+Contribution Guide
+Development process
+Branch Naming Conventions:
+Feature development: feat/descriptive name (e.g., feat/add-payment-module)
+Defect Fix: fix/issue number (e.g. fix/#123)
+Submission message format:
+* Detailed description
+* Related issue number (e.g., closes #456)
+Type labels: feat, fix, docs, refactor, test
+
+Code review must be approved by at least one core member.
+
+Use the Files changed tab on GitHub to make line comments.
+
+Test requirementsNew features must include unit tests (JUnit 5 Mockito)
+
+Integration testing needs to be configured in src/test/resources/application-test.properties.
+
+Document resources Core references Resource type link
+Complete Guide to Spring Boot Annotations https://docs.spring.io/spring-boot/docs/current/reference/html/
+Best Practices for Docker https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+Community resources: Stack Overflow tags: spring-boot, docker
+
+Chinese Forum: Spring China Community: https://spring.io/community-china
+
+Open Source China Spring Boot SectionTroubleshootingFrequently Asked QuestionsPort Conflict:
+Modify SERVER_PORT or terminate the process occupying the port:
+bash
+lsof -i :8080 && kill -9 <PID>
+
+Dependency download failed:
+Configure Maven mirror source (edit ~/.m2/settings.xml):
+  xml
+  <mirror>
+    <id>aliyun-maven</id>
+    <mirrorOf>*</mirrorOf>
+    <name>阿里云仓库</name>
+    <url>https://maven.aliyun.com/repository/public</url>
+  </mirror>
+  .....
+
+
+<!--杨文华-->
+User Guide - Configuration
+ Yang Wenhua
+Areas of Contribution:
+Analysis of Core Configuration Items
+Camunda Integration Configuration
+CIB Seven Service Connection
+Multi-environment Management
+
+```markdown
+# CIBSeven Integration Configuration Center
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1-green.svg)](https://spring.io/projects/spring-boot)
+
+##  Key Features
+
+-  **Out-of-the-box** Pre-configured Camunda workflow engine and CIB Seven connectivity
+-  **Secure Communication** AES256 encryption with sensitive data protection
+-  **Multi-environment Management** One-click switching between dev/test/prod
+-  **Monitoring Ready** Integrated Spring Actuator health checks
+-  **Auto Deployment** BPMN process auto-loading mechanism
+
+##  Quick Start
+
+### Prerequisites
+- JDK 17+
+- Camunda 7.18+
+- MySQL 8.0+/PostgreSQL 14+
+
+### Setup Steps
+1. Clone repository
+```bash
+git clone https://github.com/yourorg/cibseven-config.git
+```
+
+2. Set environment variables
+```bash
+export CIB_API_KEY=your_dev_key
+export MAIL_PASSWORD=your_smtp_pass
+```
+
+3. Start development environment
+```bash
+mvn spring-boot:run -Dspring.profiles.active=dev
+```
+
+##  System Architecture
+
+```mermaid
+graph TD
+    A[Application] --> B{Environment Config}
+    B -->|dev| C[Dev Settings]
+    B -->|prod| D[Prod Settings]
+    C --> E[Auto-Deploy]
+    D --> F[Encrypted Comm]
+    E --> G[Camunda Engine]
+    F --> H[CIB Seven Platform]
+```
+
+##  Configuration Guide
+
+### Basic Configuration
+```yaml
+# application.yaml
+server:
+  port: 8080
+spring:
+  application:
+    name: cibseven-integration
+  profiles:
+    active: dev  # Default environment
+
+cibseven:
+  platform:
+    base-url: https://api.cibseven.com/v1
+    api-key: ${CIB_API_KEY:default_dev_key}  # Use encryption in production
+```
+
+### Camunda Configuration
+```yaml
+camunda.bpm:
+  admin-user:  # Dev environment only
+    id: demo
+    password: demo
+  database:
+    schema-update: true  # Auto DB schema sync
+  auto-deployment-enabled: true  # BPMN auto-deploy
+```
+
+
+License: The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
+
+
+
+
+## Advanced Feature Exploration <!-- by 李杰东 -->
+
+This section demonstrates advanced capabilities beyond basic Spring Boot usage, focusing on enterprise-grade enhancements.
+
+### 1. Enterprise-Grade Security Hardening <!-- by 李杰东 -->
+Implement OAuth2.0 + JWT authentication flow for API protection.
+
+**Technical Stack**:
+- Spring Security 6.x
+- JJWT (Java JWT Library)
+- OAuth2 Resource Server
+
+**Configuration Steps**:
+```yaml
+# application.yml (security configuration)
+security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: https://auth-server.example.com <!-- [AI建议] 配置权威认证源 -->
+        jwk-set-uri: ${issuer-uri}/.well-known/jwks.json
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+        return http.build();
+
+    }
+}
+
+@RestController
+public class ReactiveController {
+    private final SensorRepository repository;
+
+    public ReactiveController(SensorRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<SensorData> streamData() {
+        return repository.findAll()
+            .delayElements(Duration.ofMillis(500))
+            .log("sensor-stream", Level.FINE);
+    }
+}
+
+
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-sleuth</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+</dependency>
+
+
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0 <!-- Full sampling for demo purposes -->
+
+
+      chaos:
+  monkey:
+    enabled: true
+    assaults:
+      - level: 5
+        latencyRangeStart: 1000
+        latencyRangeEnd: 5000
+        latencyActive: true
+
+
+        # Optimal GC settings for 8GB heap
+-XX:+UseG1GC
+-XX:MaxGCPauseMillis=200
+-XX:InitiatingHeapOccupancyPercent=35
+
+
+spring:
+  cache:
+    cache-names: productCache,userCache
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+
+# Test CIB seven Integration <!-- by 刘仁炽 -->
+## Test Objectives
+Verify whether the CIB seven integration works properly, including key functions such as the deployment of process definitions and the start of process instances. Ensure that the system can operate as expected after integrating CIB seven, and the interaction between various components is normal.
+## Test Environment
+- Operating System: [Windows 10]
+- Development Tool: [IntelliJ IDEA 2022.3.2]
+- Runtime Environment: [JDK 17, Spring Boot 2.6.7, Camunda BPM 7.15.0]
+- Database: [H2 Database 2.1.210]
+## Test Steps
+1. Create a Test Class: Create the LoanApprovalIntegrationTest.java file under the path src/main/java/org/cibseven/getstarted/loanapproval/ to write specific integration test code.
+2. Write Test Code:
+```bash
+package org.cibseven.getstarted.loanapproval;
+
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+public class PostDeployIntegrationTest {
+
+    @Autowired
+    private RuntimeService runtimeService;
+
+    @Test
+    public void shouldStartProcessAfterDeployment() throws Exception {
+        // Wait for the application to fully start and trigger the PostDeployEvent
+        Thread.sleep(5000); // Simple waiting, a more elegant waiting mechanism can be used in actual tests
+
+        // Verify whether the process instance has been started
+        var instances = runtimeService
+               .createProcessInstanceQuery()
+               .processDefinitionKey("loanApproval")
+               .list();
+
+        assertThat(instances).isNotEmpty();
+        assertThat(instances.size()).isEqualTo(1);
+    }
+}
+```
+3. Add the dependency in the pom.xml.
+```bash
+<dependency>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+4. Configure the Test Environment: Add the following configuration information to the application.yaml file in the src/test/resources directory:
+```bash
+spring:
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+camunda:
+  bpm:
+    auto-deployment-enabled: false
+logging:
+  level:
+    org.camunda.bpm: DEBUG
+```
+5. Execute the Test: Use the test runner of the IDE to run the test methods in the LoanApprovalIntegrationTest class; or use the project build tool (such as the mvn test command of Maven) to execute the test.
+## Expected Results
+- In the shouldDeployProcessDefinition test method, the process definition with the key "loanApproval" can be obtained, and the assertion verifies that the process definition is not null, and the test passes.
+- In the shouldStartProcessInstance test method, the process instance with the key "loanApproval" can be successfully started, and the assertion verifies that the process instance is not null and the process definition ID is not null, and the test passes.
+
+##  Advanced Configuration
+
+### Thread Pool Optimization
+```yaml
+spring:
+  task:
+    execution:
+      pool:
+        core-size: 10
+        max-size: 50
+        queue-capacity: 1000
+```
+
+### Email Integration
+```yaml
+spring:
+  mail:
+    host: smtp.cibseven.com
+    username: ${MAIL_USER}
+    password: ${MAIL_PASSWORD}  # Use Jasypt encryption
+```
+
+##  Troubleshooting
+
+### Processes Not Auto-Deployed
+**Symptom**: BPMN files not loading  
+ **Solution**:
+1. Verify file location: `resources/processes/`
+2. Confirm `.bpmn` extension
+3. Validate config:
+```yaml
+camunda.bpm:
+  auto-deployment-enabled: true
+```
+
+### Admin Login Failure
+**Symptom**: Can't access Camunda Console  
+ **Solution**:
+```yaml
+# Production config
+camunda.bpm:
+  admin-user.id: ""  # Disable default account
+  security:
+    filter-url: /engine-rest/*,/camunda/*
+```
+
+##  Extended Configuration
+
+### Sensitive Data Encryption
+```yaml
+cibseven:
+  platform:
+    api-key: ENC(AbCdEfG123456)  # Jasypt encrypted value
+
+# Add encryption password at startup
+java -jar app.jar --jasypt.encryptor.password=${ENCRYPT_KEY}
+```
+
+### Multi-Environment Setup
+```bash
+# Production startup
+java -jar app.jar --spring.profiles.active=prod \
+                  --jasypt.encryptor.password=${PROD_KEY}
+```
+
+
+
+CIB Seven Spring Boot Project Installation and Deployment Guide
+<!--覃雄伟-->
+1. Environment Preparation
+1.1 System Requirements
+Operating System: Windows 10+/Linux/macOS
+
+Java: JDK 17 or later
+
+Build Tools: Maven 3.6+ or Gradle 7.x
+
+Database: MySQL 5.7+/PostgreSQL 12+ (depending on project configuration)
+
+Optional Tool: Camunda Modeler (for editing BPMN files)
+
+1.2 Install Required Software
+Java Installation
+
+# Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install openjdk-17-jdk
+
+# Windows
+# Download and install JDK 17 from https://adoptium.net/
+
+# Verify installation
+java -version
+
+Maven Installation
+
+# Linux (Ubuntu/Debian)
+sudo apt install maven
+
+# Windows
+# Download and install from https://maven.apache.org/download.cgi
+
+# Verify installation
+mvn -v
+
+<!--张佳-->
+2. Obtain Project Code
+2.1 Clone Repository
+
+git clone https://github.com/your-repository/cibseven-springboot-project.git
+cd cibseven-springboot-project
+
+2.2 Check Branch
+
+git branch -a
+git checkout main  # or appropriate branch
+
+3. Database Configuration
+3.1 Create Database
+Check application.yaml configuration:
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/seven_spring_db?useSSL=false&characterEncoding=utf8
+    username: springuser
+    password: springpass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+Create Database (MySQL)
+
+-- Execute via MySQL client
+CREATE DATABASE IF NOT EXISTS seven_spring_db 
+DEFAULT CHARACTER SET utf8mb4 
+DEFAULT COLLATE utf8mb4_unicode_ci;
+
+CREATE USER 'springuser'@'%' IDENTIFIED BY 'springpass';
+GRANT ALL PRIVILEGES ON seven_spring_db.* TO 'springuser'@'%';
+FLUSH PRIVILEGES;
+
+PostgreSQL Example:
+
+CREATE DATABASE seven_spring_db 
+ENCODING 'UTF8' 
+LC_COLLATE 'en_US.UTF-8' 
+LC_CTYPE 'en_US.UTF-8';
+
+CREATE USER springuser WITH PASSWORD 'springpass';
+GRANT ALL PRIVILEGES ON DATABASE seven_spring_db TO springuser;
+
+4. Project Configuration
+4.1 Modify Configuration File
+Edit src/main/resources/application.yaml:
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/cibseven_db
+    username: your_username
+    password: your_password
+
+cibseven:
+  api:
+    base-url: https://api.cibseven.org/v1
+    api-key: your_api_key_here
+    timeout: 5000
+
+camunda:
+  bpm:
+    database:
+      schema-update: true
+    admin-user:
+      id: admin
+      password: admin
+
+4.2 Environment Variables (Optional)
+Set environment variables to override sensitive data:
+
+
+export SPRING_DATASOURCE_PASSWORD=your_db_password
+export CIBSVEN_API_KEY=your_api_key
+
+5. Build the Project
+5.1 Build with Maven
+
+mvn clean install -DskipTests
+5.2 Build Docker Image (Optional)
+If the project includes a Dockerfile:
+
+
+docker build -t cibseven-app:1.0 .
+
+<!--覃雄伟-->
+6. Deploy the Project
+6.1 Run Locally
+
+mvn spring-boot:run
+
+# Or run the packaged JAR
+java -jar target/cibseven-getstarted-1.0.0.jar
+6.2 Production Deployment
+Using Systemd (Linux)
+Create a service file at /etc/systemd/system/cibseven.service:
+
+
+[Unit]
+Description=CIB Seven Spring Boot Application
+After=syslog.target network.target
+
+[Service]
+User=appuser
+WorkingDirectory=/opt/cibseven
+ExecStart=/usr/bin/java -jar /opt/cibseven/cibseven-getstarted-1.0.0.jar
+SuccessExitStatus=143
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+Enable and start the service:
+
+
+sudo systemctl daemon-reload
+sudo systemctl enable cibseven
+sudo systemctl start cibseven
+Using Docker Compose
+Create docker-compose.yml:
+
+
+version: '3.8'
+
+services:
+  cibseven-app:
+    image: cibseven-app:1.0
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/cibseven_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=dbpassword
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=dbpassword
+      - MYSQL_DATABASE=cibseven_db
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:
+Start services:
+
+
+docker-compose up -d
+6.3 Deploy BPMN Models
+Steps to Deploy BPMN Models:
+
+Design & Validate BPMN Model:
+
+Use tools like Camunda Modeler to create/edit BPMN 2.0 files.
+
+Validate syntax and export as .bpmn or .bpmn20.xml.
+
+Deploy to Camunda Engine:
+
+Via REST API:
+
+
+curl -X POST \
+  "http://localhost:8080/engine-rest/deployment/create" \
+  -H "Content-Type: multipart/form-data" \
+  -F "deployment-name=my-process" \
+  -F "deployment-source=local" \
+  -F "deploy-changed-only=true" \
+  -F "my-process.bpmn=@/path/to/your/model.bpmn"
+Via Java Code:
+
+
+@Autowired
+private RepositoryService repositoryService;
+
+public void deployProcess() {
+  repositoryService.createDeployment()
+    .addClasspathResource("processes/my-process.bpmn")
+    .name("My Process Deployment")
+    .deploy();
+}
+
+<!--张佳-->
+7. Verify Deployment
+7.1 Check Application Status
+
+curl http://localhost:8080/actuator/health
+# Expected output: {"status":"UP"}
+7.2 Access Interfaces
+Swagger UI (if configured): http://localhost:8080/swagger-ui.html
+
+Camunda Tasklist: http://localhost:8080/camunda/app/tasklist
+
+8. Troubleshooting
+8.1 Database Connection Issues
+Error: Cannot create connection to database server
+
+Solutions:
+
+Verify database service is running.
+
+Check JDBC URL, username, and password in application.yaml.
+
+8.2 CIB Seven API Authentication Failure
+Error: 401 Unauthorized
+
+Solutions:
+
+Confirm API key and authentication headers are correct.
+
+Check API key permissions and expiration.
+
+8.3 BPMN Deployment Failure
+Error: Failed to deploy BPMN model
+
+Solutions:
+
+Validate BPMN file syntax using Camunda Modeler.
+
+Ensure database user has sufficient privileges.
+
+<!--覃雄伟-->
+9. Upgrade Guide
+Pull the latest code:
+
+
+git pull origin main
+Rebuild the project:
+
+
+mvn clean install
+Restart the service:
+
+
+sudo systemctl restart cibseven
+# Or
+docker-compose up -d --build
+
+10. Backup & Recovery
+10.1 Database Backup
+
+mysqldump -u username -p cibseven_db > cibseven_backup_$(date +%F).sql
+10.2 Database Restore
+
+mysql -u username -p cibseven_db < cibseven_backup_2023-01-01.sql
+
+
+
+
+
