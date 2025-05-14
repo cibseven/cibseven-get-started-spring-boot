@@ -35,29 +35,7 @@ summarize
 The integration project between CIB Seven platform and Spring Boot is an important step in the digital transformation of enterprises. Through deep integration, the technical advantages of Spring Boot will be fully utilized to enhance the development efficiency, system performance, and maintainability of the CIB Seven platform, providing strong technical support for the sustainable development of enterprises.
 
 
-《————Liu Yichang————》
-Modeling and Process Configuration
-Project Structure Conceptual Modeling
-Adopt a tree structure to precisely represent the project's file and directory structure. Take the cibseven-get-started-spring-boot repository as the root node, list the src/main directory in detail. Further divide it into subdirectories like java and resources under src/main. Meanwhile, consider.gitignore, LICENSE, NOTICE, README.md, and pom.xml as first-level child nodes at the same level as src/main. This more detailed conceptual model can clearly and comprehensively display the basic constituent elements of the project, which greatly facilitates developers to understand the overall framework of the project. For example, developers can quickly locate the src/main/java directory where the business logic code is stored and the src/main/resources directory where configuration files and other resources are placed through this model. They can also quickly find the pom.xml file that manages project dependencies and build information.
-Version Control Modeling
-Use a directed graph to model the project's version control situation. Regard each commit as a node, and take the commit information (such as Step-3: deploy and invoke BPMN process, Step 1: setup a Spring Boot application project) as the attribute of the node. Use directed edges to represent the association relationship between commits. Starting from the initial commit (for example, Start: the start of the tutorial), developers can trace the development history of the project along the directed edges. Through this model, developers can check in which commit each functional feature was added and the dependency relationship between different commits, thus making it easier to manage versions and trace problems.
-Technical Selection Data Modeling
-A concise data model can be constructed to describe the project's technical selection. For instance, define an entity "Project Technical Stack" which has attributes such as "Programming Language" (with a value of Java 17) and "Build Tool" (it can be inferred as Maven based on the pom.xml file). This model helps developers quickly grasp the technical environment on which the project depends. When expanding or maintaining the project, they can accurately determine the technical direction.
-Process Configuration
-Project Initialization Process
-First, check whether Java 17 is installed in the local development environment. If it is not installed, install it according to the guidance of the official documentation.
-Open the command-line tool and execute the command git clone https://github.com/cibseven/cibseven-get-started-spring-boot.git to clone the project repository locally.
-Then execute git checkout -f Start to switch to the initial development state and get ready for subsequent development according to the tutorial.
-Tutorial Learning and Practice Process
-According to the sequence of tutorial chapters, from the first step, execute git checkout -f Step-X (X is the number corresponding to the current tutorial step) in the command line to switch to the corresponding code state.
-Refer to the external documentation (the guide on docs.cibseven.org), and combine it with the current code state to understand the development objectives and implementation ideas of each step.
-Analyze and learn the code in the local development environment. If possible, conduct debugging to deeply understand the code logic. After completing the study of the current step, switch to the next step and continue learning.
-Project Building and Deployment Process (assuming Maven is used)
-Enter the root directory of the project and open the command-line tool.
-Execute the mvn clean install command. Maven will download the relevant dependency packages according to the dependency configuration in the pom.xml file, and compile, test, and package the project.
-After the packaging is completed, deploy the generated executable file (such as a JAR package) to the corresponding server environment, like a local test server or a production server, according to the project's deployment requirements. During the deployment process, it may be necessary to configure the running environment of the server, such as JVM parameters.
-=======
-Spring Boot quick start project template, a full-process toolchain that supports enterprise-level application development.
+
 
 
 <!--刘任炽-->
@@ -816,7 +794,29 @@ mysqldump -u username -p cibseven_db > cibseven_backup_$(date +%F).sql
 
 mysql -u username -p cibseven_db < cibseven_backup_2023-01-01.sql
 
-
+《————Liu Yichang————》
+Modeling and Process Configuration
+Project Structure Conceptual Modeling
+Adopt a tree structure to precisely represent the project's file and directory structure. Take the cibseven-get-started-spring-boot repository as the root node, list the src/main directory in detail. Further divide it into subdirectories like java and resources under src/main. Meanwhile, consider.gitignore, LICENSE, NOTICE, README.md, and pom.xml as first-level child nodes at the same level as src/main. This more detailed conceptual model can clearly and comprehensively display the basic constituent elements of the project, which greatly facilitates developers to understand the overall framework of the project. For example, developers can quickly locate the src/main/java directory where the business logic code is stored and the src/main/resources directory where configuration files and other resources are placed through this model. They can also quickly find the pom.xml file that manages project dependencies and build information.
+Version Control Modeling
+Use a directed graph to model the project's version control situation. Regard each commit as a node, and take the commit information (such as Step-3: deploy and invoke BPMN process, Step 1: setup a Spring Boot application project) as the attribute of the node. Use directed edges to represent the association relationship between commits. Starting from the initial commit (for example, Start: the start of the tutorial), developers can trace the development history of the project along the directed edges. Through this model, developers can check in which commit each functional feature was added and the dependency relationship between different commits, thus making it easier to manage versions and trace problems.
+Technical Selection Data Modeling
+A concise data model can be constructed to describe the project's technical selection. For instance, define an entity "Project Technical Stack" which has attributes such as "Programming Language" (with a value of Java 17) and "Build Tool" (it can be inferred as Maven based on the pom.xml file). This model helps developers quickly grasp the technical environment on which the project depends. When expanding or maintaining the project, they can accurately determine the technical direction.
+Process Configuration
+Project Initialization Process
+First, check whether Java 17 is installed in the local development environment. If it is not installed, install it according to the guidance of the official documentation.
+Open the command-line tool and execute the command git clone https://github.com/cibseven/cibseven-get-started-spring-boot.git to clone the project repository locally.
+Then execute git checkout -f Start to switch to the initial development state and get ready for subsequent development according to the tutorial.
+Tutorial Learning and Practice Process
+According to the sequence of tutorial chapters, from the first step, execute git checkout -f Step-X (X is the number corresponding to the current tutorial step) in the command line to switch to the corresponding code state.
+Refer to the external documentation (the guide on docs.cibseven.org), and combine it with the current code state to understand the development objectives and implementation ideas of each step.
+Analyze and learn the code in the local development environment. If possible, conduct debugging to deeply understand the code logic. After completing the study of the current step, switch to the next step and continue learning.
+Project Building and Deployment Process (assuming Maven is used)
+Enter the root directory of the project and open the command-line tool.
+Execute the mvn clean install command. Maven will download the relevant dependency packages according to the dependency configuration in the pom.xml file, and compile, test, and package the project.
+After the packaging is completed, deploy the generated executable file (such as a JAR package) to the corresponding server environment, like a local test server or a production server, according to the project's deployment requirements. During the deployment process, it may be necessary to configure the running environment of the server, such as JVM parameters.
+=======
+Spring Boot quick start project template, a full-process toolchain that supports enterprise-level application development.
 
 
 
