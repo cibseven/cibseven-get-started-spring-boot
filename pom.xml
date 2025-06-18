@@ -8,6 +8,7 @@
     <cibseven.version>2.0.0</cibseven.version>
     <spring-boot.version>3.4.4</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
+	<spin.version>2.0.0</spin.version>
   </properties>
 
   <dependencyManagement>
@@ -19,6 +20,14 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      
+	    <dependency>
+	      <groupId>org.cibseven.spin</groupId>
+	      <artifactId>cibseven-spin-bom</artifactId>
+	      <scope>import</scope>
+	      <type>pom</type>
+	    <version>${spin.version}</version>
+	    </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -41,6 +50,18 @@
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
       <version>4.0.3</version>
+    </dependency>
+    
+    <dependency>
+	    <groupId>org.cibseven.spin</groupId>
+	    <artifactId>cibseven-spin-dataformat-json-jackson</artifactId>
+	    <version>${spin.version}</version>
+	</dependency>
+		
+    <dependency>
+      <groupId>org.cibseven.bpm</groupId>
+      <artifactId>cibseven-engine-plugin-spin</artifactId>
+      <version>${spin.version}</version>
     </dependency>
   </dependencies>
 
