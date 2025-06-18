@@ -63,7 +63,14 @@
       <artifactId>cibseven-engine-plugin-spin</artifactId>
       <version>${spin.version}</version>
     </dependency>
-  </dependencies>
+   
+	<dependency>
+	    <groupId>io.vavr</groupId>
+	    <artifactId>vavr-jackson</artifactId>
+	    <version>0.10.3</version>
+	</dependency>   
+    
+   </dependencies>
 
    <build>
     <plugins>
