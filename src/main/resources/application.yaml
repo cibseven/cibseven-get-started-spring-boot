@@ -5,3 +5,16 @@ camunda.bpm:
     firstName: Demo
   filter:
     create: All tasks
+
+spring:
+  config:
+    import:
+      - optional:classpath:cibseven-webclient.properties
+
+cibseven:
+  webclient:
+    services:
+      basePath: /webapp/services/v1
+    # Engine rest
+    engineRest:
+      url: http://localhost:8080
