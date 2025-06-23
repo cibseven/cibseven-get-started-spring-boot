@@ -5,10 +5,6 @@ camunda.bpm:
     firstName: Demo
   filter:
     create: All tasks
-  run:
-    auth:
-      enabled: true
-      authentication: composite
 
 spring:
   config:
