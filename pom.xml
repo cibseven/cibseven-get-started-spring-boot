@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.0.0</cibseven.version>
+    <cibseven.version>2.0.1-alpha-ee</cibseven.version>
     <spring-boot.version>3.4.4</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
@@ -68,5 +68,27 @@
       </plugin>
     </plugins>
   </build>
+  
+  <repositories>
+    <repository>
+      <id>maven-central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <!-- Required for local enterprise releases and parent pom -->
+      <id>mvn-cibseven-enterprise</id>
+      <name>CIB seven Enterprise repository</name>
+      <url>https://artifacts.cibseven.org/repository/enterprise</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+  </repositories>
+
 
 </project>
