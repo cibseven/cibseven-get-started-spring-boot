@@ -33,6 +33,14 @@
       <artifactId>cibseven-bpm-spring-boot-starter-rest</artifactId>
       <version>${cibseven.version}</version>
     </dependency>
+    
+    <!-- LDAP Identity Plugin -->
+    <dependency>
+      <groupId>org.cibseven.bpm.identity</groupId>
+      <artifactId>cibseven-identity-ldap</artifactId>
+      <version>${cibseven.version}</version>
+    </dependency>
+    
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
