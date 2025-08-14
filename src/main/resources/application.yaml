@@ -14,7 +14,7 @@ spring:
 cibseven:
   webclient:
     services:
-      basePath: /webapp/services/v1
+      basePath: services/v1
     # Engine rest
     engineRest:
       url: http://localhost:8080
