@@ -5,6 +5,39 @@ camunda.bpm:
     firstName: Demo
   filter:
     create: All tasks
+  run:
+# https://docs.cibseven.org/manual/latest/user-guide/process-engine/identity-service/#configuration-properties-of-the-ldap-plugin
+# https://docs.cibseven.org/manual/latest/user-guide/cibseven-run/#ldap-identity-service
+# Uncomment this section to enable LDAP support for CIB seven Run
+#    ldap:
+#      enabled: true
+#      server-url: ldaps://localhost:4334
+#      accept-untrusted-certificates: false
+#      manager-dn: uid=jonny,ou=office,o=cibseven,c=org
+#      manager-password: s3cr3t
+#      base-dn: o=camunda,c=org
+#      user-search-base: ''
+#      user-search-filter: (objectclass=person)
+#      user-id-attribute: uid
+#      user-firstname-attribute: cn
+#      user-lastname-attribute: sn
+#      user-email-ttribute: mail
+#      user-password-attribute: userpassword
+#      group-search-base: ''
+#      group-search-filter: (objectclass=groupOfNames)
+#      group-id-attribute: cn
+#      group-name-attribute: cn
+#      group-member-attribute: member
+#      sort-control-supported: false
+# https://docs.cibseven.org/manual/latest/user-guide/process-engine/authorization-service/#the-administrator-authorization-plugin
+# https://docs.cibseven.org/manual/latest/user-guide/cibseven-run/#ldap-administrator-authorization
+# Uncomment this section to grant administrator authorizations to an existing LDAP user or group
+#    admin-auth:
+#      enabled: true
+#      administrator-user-name: admin
+#      administrator-group-name: admins
+#  authorization:
+#    enabled: true # Required for authorization plugin to work
 
 spring:
   config:
