@@ -1,4 +1,4 @@
-package org.cibseven.getstarted.loanapproval;
+package org.cibseven.getstarted.ldap.admin.plugin;
 
 import org.cibseven.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
