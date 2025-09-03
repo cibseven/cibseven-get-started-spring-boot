@@ -11,12 +11,12 @@ import java.util.Arrays;
 @Configuration
 public class FilterConfiguration {
 
-    @Bean
+	 @Bean
     // Composite Authentication Filter with Jwt Token and Http Basic
-    public FilterRegistrationBean<ProcessEngineAuthenticationFilter> AuthenticationFilter(JerseyApplicationPath applicationPath) {
-    	FilterRegistrationBean<ProcessEngineAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
+    public FilterRegistrationBean<JWTProcessEngineAuthenticationFilter> AuthenticationFilter(JerseyApplicationPath applicationPath) {
+    	FilterRegistrationBean<JWTProcessEngineAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setName("cibseven-composite-auth");
-    	registrationBean.setFilter(new ProcessEngineAuthenticationFilter());
+    	registrationBean.setFilter(new JWTProcessEngineAuthenticationFilter());//ProcessEngineAuthenticationFilter());
         registrationBean.setOrder(10);// Order of execution if multiple filters
 
         String restApiPathPattern = applicationPath.getPath();
@@ -51,7 +51,7 @@ public class FilterConfiguration {
         registrationBean.setAsyncSupported(true);
         // Init parameters
         registrationBean.addInitParameter(
-            "authentication-provider",
+            "authentication-provider",            
             org.cibseven.bpm.engine.rest.security.auth.impl.CompositeAuthenticationProvider.class.getName()
         );
 

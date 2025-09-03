@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.0</cibseven.version>
+    <cibseven.version>2.1.0-alpha</cibseven.version>
     <spring-boot.version>3.4.4</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
@@ -23,6 +23,11 @@
   </dependencyManagement>
 
   <dependencies>
+  	<dependency>
+	  <groupId>org.cibseven.bpm.springboot</groupId>
+	  <artifactId>cibseven-bpm-spring-boot-starter</artifactId>
+      <version>${cibseven.version}</version>
+	</dependency>
     <dependency>
       <groupId>org.cibseven.bpm.springboot</groupId>
       <artifactId>cibseven-bpm-spring-boot-starter-webapp</artifactId>
