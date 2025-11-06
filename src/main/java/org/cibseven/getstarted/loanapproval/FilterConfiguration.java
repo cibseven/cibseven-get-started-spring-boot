@@ -21,31 +21,8 @@ public class FilterConfiguration {
 
         String restApiPathPattern = applicationPath.getPath();
         
-        // Apply to all URLs under engine-rest except /engine-rest/identity/verify
-    	String[] urlPatterns = Arrays.asList(
-            "/process-definition/*",
-            "/process-instance/*",
-            "/history/*",
-            "/execution/*",
-            "/batch/*",
-            "/decision-definition/*",
-            "/deployment/*",
-            "/filter/*",
-            "/incident/*",
-            "/job-definition/*",
-            "/job/*",
-            "/telemetry/*",
-            "/metrics/*",
-            "/authorization/*",
-            "/group/*",
-            "/user/*",
-            "/message/*",
-            "/event-subscription/*",
-            "/variable-instance/*",
-            "/task/*",
-            "/engine/*",
-            "/identity/groups"
-    	).stream().map(pattern -> addUrl(restApiPathPattern, pattern)).toArray(String[]::new);
+        // Apply to all URLs - whitelist logic in the filter handlers exclusions
+        String[] urlPatterns = new String[] { addUrl(restApiPathPattern, "/*") };
 
     	// Enable async support
         registrationBean.setAsyncSupported(true);
