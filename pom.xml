@@ -34,6 +34,11 @@
       <version>${cibseven.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.cibseven.bpm.springboot</groupId>
+      <artifactId>cibseven-bpm-spring-boot-starter-security</artifactId>
+      <version>${cibseven.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
     </dependency>
