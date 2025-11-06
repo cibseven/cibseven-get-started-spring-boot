@@ -5,8 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.0-alpha</cibseven.version>
-    <spring-boot.version>3.4.4</spring-boot.version>
+    <cibseven.version>2.1.0</cibseven.version>
+    <spring-boot.version>3.5.6</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
@@ -27,7 +27,7 @@
       <groupId>org.cibseven.bpm.springboot</groupId>
       <artifactId>cibseven-bpm-spring-boot-starter-webapp</artifactId>
       <version>${cibseven.version}</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>org.cibseven.bpm.springboot</groupId>
       <artifactId>cibseven-bpm-spring-boot-starter-rest</artifactId>
@@ -37,15 +37,29 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>4.0.3</version>
-    </dependency>
   </dependencies>
 
    <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.4.1</version>
+          <executions>
+            <execution>
+              <id>enforce-dependency-convergence</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <DependencyConvergence/>
+                </rules>
+                <fail>false</fail>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
