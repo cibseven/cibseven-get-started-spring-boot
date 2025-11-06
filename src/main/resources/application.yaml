@@ -19,5 +19,5 @@ cibseven:
     engineRest:
       url: http://localhost:8080
     # BPM provider for Enterprise Edition
-    # bpm:
-    #   provider: org.cibseven.webapp.providers.SevenProviderEE
+    bpm:
+      provider: org.cibseven.webapp.providers.SevenProviderEE
