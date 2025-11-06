@@ -39,7 +39,7 @@ spring.security:
     resourceserver:
       jwt:
         principal-claim-name: preferred_username
-        jwk-set-uri: https://sso-test.cib.de/realms/cib-seven/protocol/openid-connect/certs
+        jwk-set-uri: <certsUri>
 
 cibseven:
   webclient:
