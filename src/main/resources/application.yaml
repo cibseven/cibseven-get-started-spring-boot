@@ -1,23 +1,86 @@
 camunda.bpm:
-  admin-user:
-    id: demo
-    password: demo
-    firstName: Demo
+  history-level: audit
+  authorization:
+    enabled: true
   filter:
     create: All tasks
+  oauth2:
+    identity-provider:
+      enabled: false
+
+  authorization.enabled: true
 
 spring:
+  jersey:
+    application-path: /engine-rest
   config:
     import:
       - optional:classpath:cibseven-webclient.properties
 
+spring.security:
+  oauth2:
+    # spring security oauth2 client configuration for legacy Camunda webapp
+    client:
+      registration:
+        keycloak:
+          clientId: <clientId>
+          clientSecret: <clientSecret>
+          scope: openid,profile,email,offline_access,roles
+          authorization-grant-type: authorization_code
+          redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+      provider:
+        keycloak:
+          authorization-uri: <authUri>
+          token-uri: <tokenUri>
+          user-info-uri: <usersUri>
+          jwk-set-uri: <certsUri>
+          user-name-attribute: preferred_username
+
+logging:
+  level:
+    root: INFO
+
+# CIB seven Keycloak Identity Provider Plugin
+plugin.identity.keycloak:
+  keycloakIssuerUrl: <issuerUri>
+  keycloakAdminUrl: <adminUri>
+  clientId: <clientId>
+  clientSecret: <clientSecret>
+  useEmailAsCamundaUserId: false
+  useUsernameAsCamundaUserId: true
+  useGroupPathAsCamundaGroupId: true
+  enforceSubgroupsInGroupQuery: true
+  administratorGroupName: camunda-admin
+  administratorUserId: camunda
+  disableSSLCertificateValidation: true
+
 cibseven:
   webclient:
-    services:
-      basePath: services/v1
-    # Engine rest
     engineRest:
       url: http://localhost:8080
-    # BPM provider for Enterprise Edition
-    # bpm:
-    #   provider: org.cibseven.webapp.providers.SevenProviderEE
+    authentication:
+      tokenValidMinutes: 30
+      tokenProlongMinutes: 10
+    sso:
+      active: true
+      endpoints:
+        authorization: <authUri>
+        token: <tokenUri>
+        jwks: <certsUri>
+        user: <usersUri>
+      clientId: <clientId>
+      clientSecret: <clientSecret>
+      scopes: openid email profile
+      userIdProperty: preferred_username
+      userNameProperty: name
+      accessTokenToEngineRest: true
+    bpm:
+     provider: org.cibseven.webapp.providers.SevenProvider
+    user:
+     provider: org.cibseven.webapp.auth.KeycloakUserProvider
+
+# Metrics & Health
+management:
+  endpoint.health.probes.enabled: true
+  endpoints:
+    web.exposure.include: env,health,info,metrics
