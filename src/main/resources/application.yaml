@@ -73,7 +73,7 @@ cibseven:
       scopes: openid email profile
       userIdProperty: preferred_username
       userNameProperty: name
-      accessTokenToEngineRest: true
+      accessTokenToEngineRest: false
     bpm:
      provider: org.cibseven.webapp.providers.SevenProvider
     user:
