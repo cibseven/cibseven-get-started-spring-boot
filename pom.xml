@@ -5,8 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.0</cibseven.version>
-    <spring-boot.version>3.5.6</spring-boot.version>
+    <cibseven.version>2.2.0-SNAPSHOT</cibseven.version>
+    <spring-boot.version>3.5.7</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
@@ -36,6 +36,15 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework.boot</groupId>
+    	<artifactId>spring-boot-configuration-processor</artifactId>
+    	<optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -85,9 +94,9 @@
 
   <repositories>
     <repository>
-      <id>mvn-cibseven-enterprise-snapshots</id>
-      <name>CIB seven EE Snapshots repository</name>      
-      <url>https://artifacts.cibseven.org/repository/enterprise-snapshots</url>
+      <id>mvn-cibseven-snapshots</id>
+      <name>CIB seven Snapshots repository</name>      
+      <url>https://artifacts.cibseven.org/repository/snapshots</url>
     </repository>
   </repositories>
   
