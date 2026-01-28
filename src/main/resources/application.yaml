@@ -6,9 +6,14 @@ camunda.bpm:
     create: All tasks
   oauth2:
     identity-provider:
+      # starter-security idP must be disabled
       enabled: false
 
-  authorization.enabled: true
+# Keycloak Identity Provider Plugin: secure engine REST with OAuth2
+rest.security:
+  enabled: false
+  provider: keycloak
+  required-audience: camunda-rest-api
 
 spring:
   jersey:
@@ -17,23 +22,18 @@ spring:
     import:
       - optional:classpath:cibseven-webclient.properties
 
+# Spring Boot Security configuration for Keycloak Identity Provider + OAuth2
 spring.security:
   oauth2:
-    # spring security oauth2 client configuration for legacy Camunda webapp
     client:
-      registration:
-        keycloak:
-          clientId: <clientId>
-          clientSecret: <clientSecret>
-          scope: openid,profile,email,offline_access,roles
-          authorization-grant-type: authorization_code
-          redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
       provider:
         keycloak:
-          authorization-uri: <authUri>
-          token-uri: <tokenUri>
-          user-info-uri: <usersUri>
+          issuer-uri: <issuerUri>
           jwk-set-uri: <certsUri>
+          # set user-name-attribute one of: 
+          # - sub                -> default; using keycloak ID as CIB seven user ID
+          # - email              -> useEmailAsCamundaUserId=true
+          # - preferred_username -> useUsernameAsCamundaUserId=true
           user-name-attribute: preferred_username
 
 logging:
@@ -73,7 +73,7 @@ cibseven:
       scopes: openid email profile
       userIdProperty: preferred_username
       userNameProperty: name
-      accessTokenToEngineRest: false
+      accessTokenToEngineRest: true
     bpm:
      provider: org.cibseven.webapp.providers.SevenProvider
     user:
