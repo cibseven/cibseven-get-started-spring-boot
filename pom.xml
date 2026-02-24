@@ -5,8 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.0-ee</cibseven.version>
-    <spring-boot.version>3.5.6</spring-boot.version>
+    <cibseven.version>2.1.4-ee</cibseven.version>
+    <spring-boot.version>3.5.10</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
@@ -85,9 +85,21 @@
 
   <repositories>
     <repository>
-      <id>mvn-cibseven-enterprise-snapshots</id>
-      <name>CIB seven EE Snapshots repository</name>      
-      <url>https://artifacts.cibseven.org/repository/enterprise-snapshots</url>
+      <id>maven-central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <!-- Required for local enterprise releases and parent pom -->
+      <id>mvn-cibseven-enterprise-group</id>
+      <name>CIB seven Enterprise Group repository</name>
+      <url>https://artifacts.cibseven.org/repository/enterprise-group</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
   
