@@ -5,13 +5,13 @@ camunda.bpm:
     firstName: Demo
   filter:
     create: All tasks
-
 spring:
   config:
     import:
       - optional:classpath:cibseven-webclient.properties
 
 cibseven:
+
   webclient:
     services:
       basePath: services/v1
@@ -21,3 +21,11 @@ cibseven:
     # BPM provider for Enterprise Edition
     # bpm:
     #   provider: org.cibseven.webapp.providers.SevenProviderEE
+springdoc:
+  api-docs:
+    path: /webapp/v3/api-docs
+  swagger-ui:
+    path: /webapp/swagger-ui
+    operationsSorter: alpha
+    tagsSorter: alpha
+    doc-expansion: none

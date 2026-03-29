@@ -5,13 +5,30 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.0</cibseven.version>
-    <spring-boot.version>3.5.6</spring-boot.version>
+    <cibseven.version>2.2.0-SNAPSHOT</cibseven.version>
+    <spring-boot.version>4.0.4</spring-boot.version>
+    <spring-framework.version>7.0.6</spring-framework.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <!-- Override HK2 from 4.0.0-M3 (bundled with Spring Boot) to 4.0.0 stable -->
+        <groupId>org.glassfish.hk2</groupId>
+        <artifactId>hk2-bom</artifactId>
+        <version>4.0.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <!-- Pin Spring Framework to 7.x, overrides 6.2.x leaking via cibseven transitive BOMs -->
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-framework-bom</artifactId>
+        <version>${spring-framework.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -19,24 +36,59 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- Direct override: spring-context 6.2.x leaks via cibseven BOM chain; pin to 7.x -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring-framework.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
     <dependency>
       <groupId>org.cibseven.bpm.springboot</groupId>
-      <artifactId>cibseven-bpm-spring-boot-starter-webapp</artifactId>
+      <artifactId>cibseven-bpm-spring-boot-starter-webapp-4</artifactId>
       <version>${cibseven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.cibseven.bpm.springboot</groupId>
-      <artifactId>cibseven-bpm-spring-boot-starter-rest</artifactId>
+      <artifactId>cibseven-bpm-spring-boot-starter-rest-4</artifactId>
       <version>${cibseven.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-jsr223</artifactId>
+    </dependency>
+
+    <!-- ============================================================
+     GraalVM JavaScript engine for CIB Seven Script Tasks
+     Add these to your pom.xml <dependencies> section.
+     ============================================================ -->
+
+    <!-- JS engine (implements the language) -->
+    <dependency>
+        <groupId>org.graalvm.js</groupId>
+        <artifactId>js</artifactId>
+        <version>23.0.6</version>
+    </dependency>
+
+    <!-- JSR-223 ScriptEngine adapter (bridges GraalJS ↔ javax.script API that CIB Seven uses) -->
+    <dependency>
+        <groupId>org.graalvm.js</groupId>
+        <artifactId>js-scriptengine</artifactId>
+        <version>23.0.6</version>
+    </dependency>
+
+
   </dependencies>
 
    <build>
@@ -86,9 +138,9 @@
   <repositories>
     <repository>
       <id>mvn-cibseven-enterprise-snapshots</id>
-      <name>CIB seven EE Snapshots repository</name>      
+      <name>CIB seven EE Snapshots repository</name>
       <url>https://artifacts.cibseven.org/repository/enterprise-snapshots</url>
     </repository>
   </repositories>
-  
+
 </project>
