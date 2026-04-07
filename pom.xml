@@ -5,8 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.0</cibseven.version>
-    <spring-boot.version>3.5.6</spring-boot.version>
+    <cibseven.version>2.2.0-SNAPSHOT</cibseven.version>
+    <spring-boot.version>3.5.12</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
 

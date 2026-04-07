@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 camunda.bpm:
   admin-user:
     id: demo
@@ -17,7 +20,4 @@ cibseven:
       basePath: services/v1
     # Engine rest
     engineRest:
-      url: http://localhost:8080
-    # BPM provider for Enterprise Edition
-    # bpm:
-    #   provider: org.cibseven.webapp.providers.SevenProviderEE
+      url: http://localhost:8081
