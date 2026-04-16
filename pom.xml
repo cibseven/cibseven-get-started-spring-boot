@@ -40,13 +40,13 @@
     </dependency>
     <dependency>
       <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>cibseven-bpm-spring-boot-starter-rest</artifactId>
+      <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
       <version>${camunda.version}</version>
     </dependency>
     <dependency>
       <groupId>org.camunda.bpm.extension</groupId>
       <artifactId>camunda-bpm-process-test-coverage</artifactId>
-      <version>1.0.2</version>
+      <version>0.2.8</version>
     </dependency>
     <dependency>
       <groupId>org.camunda.bpm.extension</groupId>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>org.camunda.feel</groupId>
       <artifactId>feel-engine</artifactId>
-      <version>1.21</version>
+      <version>1.21.0</version>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
