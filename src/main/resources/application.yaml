@@ -20,4 +20,5 @@ cibseven:
       url: http://localhost:8080
     # BPM provider for Enterprise Edition
     # bpm:
-    #   provider: org.cibseven.webapp.providers.SevenProviderEE
+    #   provider: org.camunda.webapp.providers.SevenProviderEE
+someMadeUpProperty: org.camunda.feel.blabla

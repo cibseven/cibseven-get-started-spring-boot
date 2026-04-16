@@ -1,6 +1,6 @@
-package org.cibseven.getstarted.loanapproval;
+package org.camunda.getstarted.loanapproval;
 
-import org.cibseven.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
+import org.camunda.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ public class FilterConfiguration {
         // Init parameters
         registrationBean.addInitParameter(
             "authentication-provider",
-            org.cibseven.bpm.engine.rest.security.auth.impl.CompositeAuthenticationProvider.class.getName()
+            org.camunda.bpm.engine.rest.security.auth.impl.CompositeAuthenticationProvider.class.getName()
         );
 
         registrationBean.addUrlPatterns(urlPatterns);

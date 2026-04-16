@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cibseven.getstarted.loanapproval;
+package org.camunda.getstarted.loanapproval;
 
-import org.cibseven.bpm.engine.RuntimeService;
-import org.cibseven.bpm.spring.boot.starter.annotation.EnableProcessApplication;
-import org.cibseven.bpm.spring.boot.starter.event.PostDeployEvent;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

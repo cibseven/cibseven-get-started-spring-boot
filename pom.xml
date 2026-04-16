@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.cibseven.bpm.getstarted</groupId>
+  <groupId>org.camunda.bpm.getstarted</groupId>
   <artifactId>loan-approval-spring-boot</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.0</cibseven.version>
+    <camunda.version>7.23</camunda.version>
     <spring-boot.version>3.5.6</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
@@ -19,19 +19,52 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+    <dependency>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-process-test-coverage-bom</artifactId>
+      <version>4.21</version>
+    </dependency>
+    <dependency>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-bpm-assert</artifactId>
+      <version>${camunda.version}</version>
+    </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
     <dependency>
-      <groupId>org.cibseven.bpm.springboot</groupId>
-      <artifactId>cibseven-bpm-spring-boot-starter-webapp</artifactId>
-      <version>${cibseven.version}</version>
+      <groupId>org.camunda.bpm.springboot</groupId>
+      <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+      <version>${camunda.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.cibseven.bpm.springboot</groupId>
+      <groupId>org.camunda.bpm.springboot</groupId>
       <artifactId>cibseven-bpm-spring-boot-starter-rest</artifactId>
-      <version>${cibseven.version}</version>
+      <version>${camunda.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-bpm-process-test-coverage</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-bpm-junit5</artifactId>
+      <version>${camunda.version}</version>
+    </dependency>    
+    <dependency>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-bpm-assert-root</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-bpm-mockito</artifactId>
+      <version>${camunda.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.camunda.feel</groupId>
+      <artifactId>feel-engine</artifactId>
+      <version>1.21</version>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
