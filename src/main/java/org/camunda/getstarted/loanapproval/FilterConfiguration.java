@@ -33,7 +33,7 @@ public class FilterConfiguration {
         // Init parameters
         registrationBean.addInitParameter(
             "authentication-provider",
-            org.camunda.bpm.engine.rest.security.auth.impl.CompositeAuthenticationProvider.class.getName()
+            org.camunda.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider.class.getName()
         );
 
         registrationBean.addUrlPatterns(urlPatterns);
