@@ -6,6 +6,10 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.cibseven.bpm.extension.process_test_coverage.junit.rules.TestCoverageProcessEngineRuleBuilder;
+import org.cibseven.bpm.extension.process_test_coverage.junit.rules.TestCoverageProcessEngineRule;
+
+
 import java.util.Arrays;
 
 @Configuration
