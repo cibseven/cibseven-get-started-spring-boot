@@ -22,7 +22,7 @@
       
     <dependency>
       <groupId>org.camunda.community.process_test_coverage</groupId>
-      <artifactId>camunda-process-test-coverage-root</artifactId>
+      <artifactId>camunda-process-test-coverage</artifactId>
       <version>3.0.1</version>
     </dependency>
     <!--- <dependency>
