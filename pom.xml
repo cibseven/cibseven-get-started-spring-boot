@@ -5,8 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.1.4-ee</cibseven.version>
-    <spring-boot.version>3.5.10</spring-boot.version>
+    <cibseven.version>2.1.3-ee</cibseven.version>
+    <spring-boot.version>3.5.9</spring-boot.version>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
@@ -32,6 +32,10 @@
       <groupId>org.cibseven.bpm.springboot</groupId>
       <artifactId>cibseven-bpm-spring-boot-starter-rest</artifactId>
       <version>${cibseven.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>

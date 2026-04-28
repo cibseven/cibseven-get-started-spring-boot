@@ -20,3 +20,6 @@ hs_err_pid*
 .classpath
 .settings
 .project
+
+cibseven-h2-db.mv.db
+.vscode/launch.json
