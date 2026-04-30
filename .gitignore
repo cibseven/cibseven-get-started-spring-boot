@@ -21,5 +21,6 @@ hs_err_pid*
 .settings
 .project
 
-cibseven-h2-db.mv.db
+*.mv.db
+*.trace.db
 .vscode/launch.json
