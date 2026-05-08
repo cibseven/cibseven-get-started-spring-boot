@@ -19,13 +19,15 @@ public class CamundaDataSourceConfig {
     return new DataSourceProperties();
   }
 
-  @Bean(name = "camundaDataSource")
+  //Will be picked up by org.cibseven.bpm.spring.boot.starter.configuration.impl.DefaultDatasourceConfiguration
+  @Bean("camundaBpmDataSource")
   public DataSource camundaDataSource(
       @Qualifier("camundaDataSourceProperties") DataSourceProperties properties) {
     return properties.initializeDataSourceBuilder().build();
   }
 
-  @Bean(name = "camundaTransactionManager")
+  //Will be picked up by org.cibseven.bpm.spring.boot.starter.configuration.impl.DefaultDatasourceConfiguration
+  @Bean("camundaBpmTransactionManager")
   public PlatformTransactionManager camundaTransactionManager(
       @Qualifier("camundaDataSource") DataSource camundaDataSource) {
     return new DataSourceTransactionManager(camundaDataSource);
