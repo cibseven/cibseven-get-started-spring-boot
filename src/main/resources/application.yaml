@@ -6,18 +6,39 @@ camunda.bpm:
   filter:
     create: All tasks
 
+logging.level.org.cibseven.mcp: DEBUG
+
 spring:
   config:
     import:
       - optional:classpath:cibseven-webclient.properties
+  ai:
+    mcp:
+      server:
+        protocol: STREAMABLE
+        name: cibseven-mcp-server
+        version: 1.0.0
+        type: SYNC
+        instructions: "CIB seven MCP server which offers CIB seven Engine REST API tools and business tools, which execute CIB seven processes"
+        streamable-http:
+          mcp-endpoint: /mcp
 
 cibseven:
+  mcp:
+    processes-mcp: true
+    restapi-mcp: true
   webclient:
     services:
       basePath: services/v1
     # Engine rest
     engineRest:
       url: http://localhost:8080
-    # BPM provider for Enterprise Edition
-    # bpm:
-    #   provider: org.cibseven.webapp.providers.SevenProviderEE
+
+springdoc:
+  api-docs:
+    path: /webapp/v3/api-docs
+  swagger-ui:
+    path: /webapp/swagger-ui
+    operationsSorter: alpha
+    tagsSorter: alpha
+    doc-expansion: none
