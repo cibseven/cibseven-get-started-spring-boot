@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0iqfoa9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <bpmn:process id="mcpProcess_jira-add-comment-krank" name="Add Comment to KRANK Jira Task" isExecutable="true" camunda:historyTimeToLive="996">
+    <bpmn:documentation>This process adds a comment to a Jira issue (KRANK-5735). It creates the comment JSON, optionally lets the initiator review it, sends it via a REST PUT request to Jira, and then stops for final confirmation. The desired comment to add should be set as commentBody input variable</bpmn:documentation>
+    <bpmn:startEvent id="StartEvent_1" camunda:initiator="initiator">
+      <bpmn:outgoing>Flow_1djlhph</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1djlhph" sourceRef="StartEvent_1" targetRef="Activity_1x19ugu" />
+    <bpmn:serviceTask id="Activity_015zboq" name="Request senden" camunda:modelerTemplate="rest-3.0.3" camunda:class="de.cib.cibflow.template.rest.SendRestRequestTask">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="queryParameters" />
+          <camunda:inputParameter name="fileBody" />
+          <camunda:inputParameter name="xWwwFormUrlencodedBodyParameters" />
+          <camunda:inputParameter name="certificate" />
+          <camunda:inputParameter name="certificatePassword" />
+          <camunda:inputParameter name="throwBpmnErrorOnFailure">true</camunda:inputParameter>
+          <camunda:inputParameter name="returnType">void</camunda:inputParameter>
+          <camunda:inputParameter name="resultVariableNameStatusCode">statusCode</camunda:inputParameter>
+          <camunda:inputParameter name="resultVariableName">response</camunda:inputParameter>
+          <camunda:inputParameter name="requestHeaders">Content-Type=application/json
+Authorization=Basic c3lzLWppcmE6OVJxbTcvInBXb0RYTi9tYlRTTQ==</camunda:inputParameter>
+          <camunda:inputParameter name="url">https://jiraupdatetest.cib.de/rest/api/2/issue/KRANK-5735</camunda:inputParameter>
+          <camunda:inputParameter name="requestType">PUT</camunda:inputParameter>
+          <camunda:inputParameter name="jsonBodyVariableName">commentJson</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:properties>
+          <camunda:property name="documentation" value="Mit diesem Element-Template kann ein beliebiger Get-Request abgesetzt werden." />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1oc9s3o</bpmn:incoming>
+      <bpmn:outgoing>Flow_0f8pl5u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0f8pl5u" sourceRef="Activity_015zboq" targetRef="Activity_0uhe268" />
+    <bpmn:userTask id="Activity_0uhe268" name="STOP" camunda:assignee="${initiator}">
+      <bpmn:incoming>Flow_0f8pl5u</bpmn:incoming>
+      <bpmn:outgoing>Flow_11vqbi6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_190tx7w">
+      <bpmn:incoming>Flow_11vqbi6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_11vqbi6" sourceRef="Activity_0uhe268" targetRef="Event_190tx7w" />
+    <bpmn:sequenceFlow id="Flow_0t49bwy" sourceRef="Activity_1x19ugu" targetRef="Activity_1iif64i" />
+    <bpmn:scriptTask id="Activity_1x19ugu" name="create comment" scriptFormat="groovy">
+      <bpmn:incoming>Flow_1djlhph</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t49bwy</bpmn:outgoing>
+      <bpmn:script>def commentJson = "{\"update\":{\"comment\":[{\"add\":{\"body\":\"${commentBody}\"}}]}}";
+execution.setVariable("out_commentJson", commentJson);
+execution.setVariable("out_status", "sick leave");</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_1oc9s3o" sourceRef="Activity_1iif64i" targetRef="Activity_015zboq" />
+    <bpmn:userTask id="Activity_1iif64i" camunda:assignee="${initiator}">
+      <bpmn:incoming>Flow_0t49bwy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1oc9s3o</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="mcpProcess_jira-add-comment-krank">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0w2kih7_di" bpmnElement="Activity_015zboq">
+        <dc:Bounds x="570" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1hjayii_di" bpmnElement="Activity_0uhe268">
+        <dc:Bounds x="740" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_190tx7w_di" bpmnElement="Event_190tx7w">
+        <dc:Bounds x="902" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ia58mj_di" bpmnElement="Activity_1x19ugu">
+        <dc:Bounds x="250" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lwzpl7_di" bpmnElement="Activity_1iif64i">
+        <dc:Bounds x="410" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1djlhph_di" bpmnElement="Flow_1djlhph">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="250" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f8pl5u_di" bpmnElement="Flow_0f8pl5u">
+        <di:waypoint x="670" y="120" />
+        <di:waypoint x="740" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11vqbi6_di" bpmnElement="Flow_11vqbi6">
+        <di:waypoint x="840" y="120" />
+        <di:waypoint x="902" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t49bwy_di" bpmnElement="Flow_0t49bwy">
+        <di:waypoint x="350" y="120" />
+        <di:waypoint x="410" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1oc9s3o_di" bpmnElement="Flow_1oc9s3o">
+        <di:waypoint x="510" y="120" />
+        <di:waypoint x="570" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
