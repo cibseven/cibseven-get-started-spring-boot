@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 import org.camunda.community.process_test_coverage.junit4.platform7.rules.TestCoverageProcessEngineRuleBuilder;
 import org.camunda.community.process_test_coverage.junit4.platform7.rules.TestCoverageProcessEngineRule;
-
+import org.camunda.bpm.extension.mockito.delegate.DelegateExecutionFake;
+import static org.camunda.bpm.extension.mockito.ProcessExpressions.registerCallActivityMock;
+import static org.camunda.bpm.extension.mockito.DelegateExpressions.registerJavaDelegateMock;
 
 import java.util.Arrays;
 
