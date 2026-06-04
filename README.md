@@ -73,4 +73,71 @@ Both sides now read the same value from `cibseven-webclient.properties`.
 openssl rand -base64 128 | tr -d '\n'
 ```
 
+---
+
+## Kubernetes Reproduction (branch: `license-issue-k8s`)
+
+The `k8s/` folder contains manifests that demonstrate the broken → fixed pattern
+using a single Docker image. The env var is the only difference between deployments.
+
+### Prerequisites
+
+- Docker + local Kubernetes (Docker Desktop, colima `--kubernetes`, kind, minikube)
+- `kubectl` configured to point at the local cluster
+
+### Build the image
+
+```bash
+mvn clean package -DskipTests
+docker build -f k8s/Dockerfile -t cibseven-license-demo:broken .
+```
+
+For **colima/k3s** — load image into containerd:
+```bash
+docker save cibseven-license-demo:broken | colima ssh -- sudo ctr -n k8s.io images import -
+```
+
+For **kind**:
+```bash
+kind load docker-image cibseven-license-demo:broken
+```
+
+### Reproduce the broken state
+
+```bash
+kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/deployment-broken.yaml
+kubectl rollout status deployment/cibseven-broken
+```
+
+Open http://localhost:30080/webapp, log in as `demo`/`demo`,  
+go to **Admin → System → License Key**, paste any license key, and observe the error in logs:
+
+```bash
+kubectl logs -l app=cibseven --follow
+# ENGINE-REST-HTTP500: Failed to decrypt license signature. The JWT secret may have been rotated.
+```
+
+### Apply the fix (same image, no rebuild)
+
+```bash
+kubectl delete deployment cibseven-broken
+kubectl apply -f k8s/secret.yaml
+kubectl apply -f k8s/deployment-fix.yaml
+kubectl rollout status deployment/cibseven-fix
+```
+
+Open http://localhost:30080/webapp — setting the license key now succeeds.
+
+### Why this works
+
+`CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET` is the only mechanism that reaches both consumers:
+
+| Consumer | Without env var | With env var |
+|---|---|---|
+| Webclient (Spring) | reads `application.yaml` → `2tURHZ7...` | Spring relaxed binding → `RtURHZ7...` ✅ |
+| Engine (`Configuration.java`) | reads classpath `.properties` → `RtURHZ7...` | `System.getenv()` priority 1 → `RtURHZ7...` ✅ |
+
+---
+
 License: The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).

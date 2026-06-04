@@ -1,0 +1,51 @@
+# FIXED STATE — same image, env var resolves the mismatch
+#
+# CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET is injected from the K8s Secret.
+# This single env var aligns both sides simultaneously:
+#
+#   Configuration.readEnvironment() (engine)
+#     → reads System.getenv() first (highest priority)
+#     → overrides cibseven-webclient.properties from classpath
+#
+#   Spring Boot relaxed binding (webclient)
+#     → maps env var to cibseven.webclient.authentication.jwtSecret
+#     → overrides application.yaml value
+#
+# Both sides now use the same secret → license processing succeeds.
+# No JAR rebuild or file changes needed — pure Kubernetes config.
+#
+# Steps to apply the fix (from broken state):
+#   kubectl delete deployment cibseven-broken
+#   kubectl apply -f k8s/secret.yaml
+#   kubectl apply -f k8s/deployment-fix.yaml
+#   open http://localhost:30080/webapp  (demo / demo)
+#   Admin → System → License Key → paste key → succeeds
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cibseven-fix
+  labels:
+    app: cibseven
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cibseven
+  template:
+    metadata:
+      labels:
+        app: cibseven
+    spec:
+      containers:
+        - name: cibseven
+          image: cibseven-license-demo:broken
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cibseven-secrets
+                  key: jwtSecret

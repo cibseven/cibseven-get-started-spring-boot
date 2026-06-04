@@ -1,0 +1,44 @@
+# BROKEN STATE — reproduces the license decryption failure
+#
+# The JAR is built from this branch (license-issue-k8s).
+# It contains two conflicting jwtSecret values baked in:
+#
+#   application.yaml → jwtSecret: 2tURHZ7...
+#     Spring env resolves this → webclient uses 2tURHZ7... to sign JWT auth tokens
+#
+#   cibseven-webclient.properties (classpath) → jwtSecret=RtURHZ7...
+#     Configuration.java reads this directly → engine uses RtURHZ7... to verify tokens
+#     and to process the license signature
+#
+# No env var override → values differ → error:
+#   "Failed to decrypt license signature. The JWT secret may have been rotated."
+#
+# Steps to reproduce:
+#   kubectl apply -f k8s/service.yaml
+#   kubectl apply -f k8s/deployment-broken.yaml
+#   open http://localhost:30080/webapp  (demo / demo)
+#   Admin → System → License Key → paste any key → check logs:
+#   kubectl logs -l app=cibseven --follow
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cibseven-broken
+  labels:
+    app: cibseven
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cibseven
+  template:
+    metadata:
+      labels:
+        app: cibseven
+    spec:
+      containers:
+        - name: cibseven
+          image: cibseven-license-demo:broken
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
