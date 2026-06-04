@@ -174,14 +174,53 @@ Use the env var instead to avoid path resolution issues entirely.
 
 ---
 
-### Why this works
+### Why the env var is the only safe lever — and how to set it
 
-`CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET` is the only mechanism that reaches both consumers:
+`CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET` is the only configuration mechanism that reaches both consumers simultaneously:
 
 | Consumer | Without env var | With env var |
 |---|---|---|
 | Webclient (Spring) | reads `application.yaml` → `2tURHZ7...` | Spring relaxed binding → `RtURHZ7...` ✅ |
 | Engine (`Configuration.java`) | reads classpath `.properties` → `RtURHZ7...` | `System.getenv()` priority 1 → `RtURHZ7...` ✅ |
+
+**Kubernetes (recommended)** — store the secret in a K8s Secret and inject it as an env var:
+
+```yaml
+# secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cibseven-secrets
+type: Opaque
+stringData:
+  jwtSecret: "<generate: openssl rand -base64 128 | tr -d '\n'>"
+```
+
+```yaml
+# deployment.yaml — env section
+env:
+  - name: CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET
+    valueFrom:
+      secretKeyRef:
+        name: cibseven-secrets
+        key: jwtSecret
+```
+
+**Docker Compose:**
+
+```yaml
+services:
+  cibseven:
+    environment:
+      - CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET=<your-secret>
+```
+
+**Local / shell:**
+
+```bash
+export CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET=<your-secret>
+mvn spring-boot:run
+```
 
 ---
 
