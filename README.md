@@ -174,6 +174,76 @@ Use the env var instead to avoid path resolution issues entirely.
 
 ---
 
+**Trap 4: Secret updated, pod not restarted**
+
+```bash
+kubectl edit secret cibseven-secrets   # value changed
+# pod keeps running — env vars are snapshotted at pod start
+```
+
+→ The running pod still has the old value in its environment.
+Kubernetes does **not** restart pods when a Secret changes.
+
+```bash
+kubectl rollout restart deployment/cibseven-fix
+```
+
+---
+
+**Trap 5: Rolling update — mixed-generation pods**
+
+During a rolling update, old pods (with the baked-in `2tURHZ7...` in `application.yaml`)
+and new pods (with the env var override) coexist. License-check requests that land on an
+old pod fail. The error appears intermittently until the rollout completes.
+
+Ensure `imagePullPolicy: Always` and use a versioned image tag (not `latest`) so both
+generations are never live simultaneously for longer than the rollout window.
+
+---
+
+**Trap 6: Env var silently absent — typo in name or missing `secretKeyRef`**
+
+If the env var name is misspelled (e.g. `CIBSEVEN_WEBCLIENT_AUTH_JWTSECRET` instead of
+`CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET`), both sides silently fall back to their
+baked-in values. No error is logged about the misconfiguration itself.
+
+If `secretKeyRef.key` doesn't match the key in the Secret exactly, the pod either fails
+to start (if `optional: false`) or the env var is injected as empty string.
+
+Verify before deploying:
+```bash
+kubectl get secret cibseven-secrets -o jsonpath='{.data}' | jq 'keys'
+kubectl set env deployment/cibseven-fix --list | grep JWT
+```
+
+---
+
+**Trap 7: Secret not applied in the target namespace / environment**
+
+The Secret exists in `dev` but was never applied to `staging` or `prod`. The deployment
+spec references it, so either:
+- the pod fails to start with `secret "cibseven-secrets" not found`, or
+- if the volume/env is marked `optional: true`, the var is absent → mismatch returns.
+
+```bash
+kubectl get secret cibseven-secrets -n <namespace>
+```
+
+---
+
+**Trap 8: External config server (Spring Cloud Config) rotates the secret**
+
+If `application.yaml` is served from a Spring Cloud Config Server and someone updates
+`jwtSecret` there, Spring Boot refreshes the value (especially with `@RefreshScope`).
+The webclient picks up the new value, but `Configuration.java` on the engine side reads
+`System.getenv()` — which still has the old Secret value until the pod is restarted.
+The mismatch returns silently.
+
+When using Spring Cloud Config, the K8s Secret and the config server entry for `jwtSecret`
+must always be updated together, followed by a pod restart.
+
+---
+
 ### Why the env var is the only safe lever — and how to set it
 
 `CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET` is the only configuration mechanism that reaches both consumers simultaneously:
