@@ -129,6 +129,51 @@ kubectl rollout status deployment/cibseven-fix
 
 Open http://localhost:30080/webapp — setting the license key now succeeds.
 
+### Common traps — why partial fixes still fail
+
+**Trap 1: `jwtSecret` set only in a ConfigMap-mounted `application.yaml`**
+
+```yaml
+# ConfigMap → application.yaml
+cibseven:
+  webclient:
+    authentication:
+      jwtSecret: <new-value>   # Spring picks this up ✅
+```
+
+→ Webclient aligned, but `Configuration.java` never touches Spring context →
+engine still reads the baked-in `cibseven-webclient.properties` → **still broken**.
+
+---
+
+**Trap 2: `cibseven-webclient.properties` mounted as a volume, but `spring.config.import` missing**
+
+```yaml
+# deployment.yaml
+volumes:
+  - name: props
+    configMap:
+      name: webclient-props
+volumeMounts:
+  - mountPath: /app/cibseven-webclient.properties
+    name: props
+    subPath: cibseven-webclient.properties
+```
+
+→ Engine reads the file (classpath lookup succeeds) → engine aligned ✅  
+→ But `spring.config.import` is not in `application.yaml` → Spring ignores the file →
+webclient still uses the `application.yaml` value → **still broken**.
+
+---
+
+**Trap 3: `cibseven-webclient.properties` mounted AND `spring.config.import` present**
+
+This works — but only if the mount path is on the Spring classpath. If the mount
+path is not on the classpath, `Configuration.java`'s classloader won't find it either.
+Use the env var instead to avoid path resolution issues entirely.
+
+---
+
 ### Why this works
 
 `CIBSEVEN_WEBCLIENT_AUTHENTICATION_JWTSECRET` is the only mechanism that reaches both consumers:
