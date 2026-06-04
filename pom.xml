@@ -5,10 +5,10 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.2.0-SNAPSHOT</cibseven.version>
-    <spring-boot.version>4.0.4</spring-boot.version>
+    <cibseven.version>2.2.0</cibseven.version>
+    <spring-boot.version>4.0.6</spring-boot.version>
     <spring-framework.version>7.0.6</spring-framework.version>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
   </properties>
 
   <dependencyManagement>
