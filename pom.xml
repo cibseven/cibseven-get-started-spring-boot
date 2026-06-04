@@ -14,33 +14,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <!-- Override HK2 from 4.0.0-M3 (bundled with Spring Boot) to 4.0.0 stable -->
-        <groupId>org.glassfish.hk2</groupId>
-        <artifactId>hk2-bom</artifactId>
-        <version>4.0.0</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <!-- Pin Spring Framework to 7.x, overrides 6.2.x leaking via cibseven transitive BOMs -->
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-framework-bom</artifactId>
-        <version>${spring-framework.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
         <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <!-- Direct override: spring-context 6.2.x leaks via cibseven BOM chain; pin to 7.x -->
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${spring-framework.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
