@@ -7,7 +7,7 @@
   <properties>
     <cibseven.version>2.2.0</cibseven.version>
     <spring-boot.version>3.5.14</spring-boot.version>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
   </properties>
 
   <dependencyManagement>
