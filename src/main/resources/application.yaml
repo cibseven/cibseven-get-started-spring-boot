@@ -15,9 +15,9 @@ cibseven:
   webclient:
     services:
       basePath: services/v1
-    # Engine rest
-    engineRest:
-      url: http://localhost:8080
-    # BPM provider for Enterprise Edition
-    # bpm:
-    #   provider: org.cibseven.webapp.providers.SevenProviderEE
+    # Engine rest - not needed when using Direct Provider
+    # engineRest:
+    #   url: http://localhost:8080
+    # BPM provider for Enterprise Edition - Direct Provider (no REST, in-process)
+    bpm:
+      provider: org.cibseven.webapp.providers.SevenDirectProviderEE
