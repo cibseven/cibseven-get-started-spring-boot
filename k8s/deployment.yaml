@@ -1,0 +1,38 @@
+# Direct Provider — no REST engine URL needed
+#
+# CIBSEVEN_WEBCLIENT_BPM_PROVIDER overrides application.yaml via Spring Boot
+# relaxed binding (dots → underscores, uppercase).
+# The webclient connects to the process engine in-process — no REST hop.
+#
+# Steps:
+#   mvn clean package -DskipTests
+#   docker build -f k8s/Dockerfile -t cibseven-direct-provider-demo .
+#   kubectl apply -f k8s/service.yaml
+#   kubectl apply -f k8s/deployment.yaml
+#   open http://localhost:30080/webapp  (demo / demo)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cibseven-direct-provider
+  labels:
+    app: cibseven
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cibseven
+  template:
+    metadata:
+      labels:
+        app: cibseven
+    spec:
+      containers:
+        - name: cibseven
+          image: cibseven-direct-provider-demo
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CIBSEVEN_WEBCLIENT_BPM_PROVIDER
+              value: org.cibseven.webapp.providers.SevenDirectProviderEE
