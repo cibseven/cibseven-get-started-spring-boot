@@ -19,7 +19,7 @@ spring:
         name: cibseven-mcp-server
         version: 1.0.0
         type: SYNC
-        instructions: "CIB seven MCP server which offers CIB seven Engine REST API tools and business tools, which execute CIB seven processes"
+        instructions: "CIB seven MCP server exposing the Engine REST API and business tools to execute CIB seven processes."
         streamable-http:
           mcp-endpoint: /mcp
 
@@ -33,7 +33,9 @@ cibseven:
     # Engine rest
     engineRest:
       url: http://localhost:8080
-
+    # BPM provider for Enterprise Edition
+    # bpm:
+    #   provider: org.cibseven.webapp.providers.SevenProviderEE
 springdoc:
   api-docs:
     path: /webapp/v3/api-docs
