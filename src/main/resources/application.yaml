@@ -25,7 +25,7 @@ spring:
 
 cibseven:
   mcp:
-    processes-mcp: true
+    process-mcp: true
     restapi-mcp: true
   webclient:
     services:

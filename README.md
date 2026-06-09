@@ -43,7 +43,7 @@ and enable them in the configuration:
 cibseven:
   mcp:
     restapi-mcp: true
-    processes-mcp: true
+    process-mcp: true
 ```
 ### Authentication
 
