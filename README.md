@@ -84,6 +84,22 @@ Regarding the MCP client configuration:
 }
 ```
 
+### Outgoing engine-rest authentication
+
+The two sections above secure the inbound hop (MCP client → MCP server). How the MCP
+server then authenticates its **outgoing** calls to engine-rest is controlled by
+`cibseven.mcp.engine-rest.auth` (provided by `common-mcp-auth`). The default,
+`passthrough`, forwards the validated bearer unchanged; `minted-jwt` instead mints a
+short-lived CIB seven JWT so the engine's (LDAP) identity provider stays authoritative.
+See the [REST API MCP plugin README](https://github.com/cibseven/cibseven-mcp-restapi#outgoing-engine-rest-authentication)
+for the full strategy, properties and deployment requirements.
+
+This example is configured for `minted-jwt` with the Graph-based resolver (Entra `oid` →
+`onPremisesSamAccountName`). The OAuth2 issuer and the `graph` client registration are
+read from the environment — for pure local development without Entra, comment out the
+`spring.security.oauth2` block in `application.yaml` and set
+`cibseven.mcp.engine-rest.auth: passthrough`.
+
 ### Example
 
 *We configure the server to be named as `cibseven-mcp`.*

@@ -22,11 +22,39 @@ spring:
         instructions: "CIB seven MCP server exposing the Engine REST API and business tools to execute CIB seven processes."
         streamable-http:
           mcp-endpoint: /mcp
+  # OAuth2: validate the inbound MCP bearer (resource server) and obtain an app-only
+  # Graph token (client registration 'graph', client_credentials) for the oid->sAMAccountName
+  # lookup. Values come from the environment — do NOT commit tenant ids / secrets (task G.17).
+  # Setting issuer-uri activates CommonMcpOAuth2Configuration; for pure local dev without
+  # Entra, comment this block out and set cibseven.mcp.engine-rest.auth=passthrough.
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ENTRA_ISSUER_URI}        # https://login.microsoftonline.com/<tenant-id>/v2.0
+      client:
+        registration:
+          graph:
+            client-id: ${GRAPH_CLIENT_ID}
+            client-secret: ${GRAPH_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+            scope: https://graph.microsoft.com/.default
+            provider: entra
+        provider:
+          entra:
+            token-uri: ${ENTRA_TOKEN_URI}        # https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token
 
 cibseven:
   mcp:
     process-mcp: true
     restapi-mcp: true
+    # Engine-rest auth strategy (common-mcp-auth). minted-jwt: translate the validated
+    # Entra identity into a short-lived CIB seven HMAC JWT; resolver=graph maps the Entra
+    # oid -> onPremisesSamAccountName via Microsoft Graph (LDAP-prod path, tasks D.8/D.9).
+    engine-rest:
+      auth: minted-jwt
+      minted-jwt:
+        resolver: graph
   webclient:
     services:
       basePath: services/v1
