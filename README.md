@@ -84,6 +84,15 @@ Regarding the MCP client configuration:
 }
 ```
 
+### Dockerimage
+The `Dockerfile` in the root directory is provided for testing purposes only.
+
+```bash
+podman build -t cibseven-mcp
+podman run -d --name cibseven-mcp -p 8080:8080 `
+  cibseven-mcp
+```
+
 ### Example
 
 *We configure the server to be named as `cibseven-mcp`.*
