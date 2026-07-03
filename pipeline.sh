@@ -8,7 +8,7 @@ else
   JAVA_ARGUMENT="--build-arg JAVA=${JAVA}"
 fi
 
-IMAGE=cibseven/${IMAGE_NAME}
+IMAGE=cibseven/cibseven-mcp-restapi
 
 docker buildx build .                         \
     -t "${IMAGE}:${VERSION}"                  \

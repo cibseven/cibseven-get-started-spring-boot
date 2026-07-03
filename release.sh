@@ -3,7 +3,7 @@
 VERSION=${VERSION:-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)}
 JAVA=${JAVA:-21}
 
-IMAGE=cibseven/${IMAGE_NAME}
+IMAGE=cibseven/cibseven-mcp-restapi
 
 function build_and_push {
     local tags=("$@")
