@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
 VERSION=${VERSION:-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)}
-JAVA=${JAVA:-21}
+JAVA=${JAVA:-17}
 
 IMAGE=cibseven/cibseven-mcp-restapi
 

@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: ./pipeline.sh
         env:
-          JAVA: 21
+          JAVA: 17
   publish:
     runs-on: ubuntu-24.04
     needs: build
@@ -45,6 +45,6 @@ jobs:
       - name: Publish images
         run: ./release.sh
         env:
-          JAVA: 21
+          JAVA: 17
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
