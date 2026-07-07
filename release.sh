@@ -34,7 +34,7 @@ tags+=("${VERSION}")
 # Latest Docker image is created and pushed just once when a new version is released.
 # Latest tag refers to the latest release (never a SNAPSHOT).
 # Uses GITHUB_REF_NAME because git rev-parse returns "HEAD" (detached) on GitHub runners.
-if [ "$GITHUB_REF_NAME" = "cibseven-mcp-servers" ] && [[ "${VERSION}" != *-SNAPSHOT ]]; then
+if [ "$GITHUB_REF_NAME" = "cibseven-mcp-servers2-clean" ] && [[ "${VERSION}" != *-SNAPSHOT ]]; then
     tags+=("latest")
 fi
 
