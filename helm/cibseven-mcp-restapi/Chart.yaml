@@ -1,0 +1,34 @@
+apiVersion: v2
+name: cibseven-mcp-restapi
+description: >-
+  Helm chart for the CIB seven "getting started" Spring Boot demo that embeds
+  the CIB seven engine, webapp and the cibseven-mcp-restapi MCP server
+  (image cibseven/cibseven-mcp-restapi).
+home: https://github.com/cibseven/cibseven-get-started-spring-boot
+sources:
+  - https://github.com/cibseven/cibseven-get-started-spring-boot.git
+
+maintainers:
+  - name: CIB software GmbH
+    email: support@cib.de
+    url: https://www.cib.de/
+
+keywords:
+  - cibseven-mcp-restapi
+  - cibseven-mcp
+  - CIB seven
+  - MCP
+
+type: application
+
+# Chart version. Bump on every chart change.
+version: 0.1.0
+
+# Version of the application (docker image tag) this chart deploys by default.
+# Matches `docker pull cibseven/cibseven-mcp-restapi:0.0.3-SNAPSHOT`.
+appVersion: "0.0.3-SNAPSHOT"
+
+dependencies:
+  - name: common-tpl-lib
+    version: 2.7.0
+    repository: oci://harbor.cib.de/charts

@@ -1,0 +1,227 @@
+# Default values for cibseven-mcp-restapi.
+# This is a YAML-formatted file.
+#
+# This chart deploys the CIB seven "getting started" Spring Boot demo, which
+# bundles the CIB seven engine, the webapp and the cibseven-mcp-restapi MCP
+# server into a single container (image cibseven/cibseven-mcp-restapi).
+#
+# All Kubernetes objects are rendered by the shared common-tpl-lib template
+# library (see templates/objects.yaml), exactly like the cibseven-webclient
+# chart.
+
+# ---------------------------------------------------------------------------
+# Configuration shared by multiple CIB (seven) charts.
+# ---------------------------------------------------------------------------
+global:
+  image:
+    # Docker Hub organisation the image is published under.
+    repository: cibseven
+    # Use "Always" for productive environments.
+    pullPolicy: IfNotPresent
+
+  probes:
+    enabled: true
+
+  resources:
+    enabled: false
+
+# ---------------------------------------------------------------------------
+# Demo admin user.
+#
+# Security note: the image ships with the insecure demo/demo credentials baked
+# into src/main/resources/application.yaml. This chart overrides them and
+# renders the password into a Kubernetes *Secret* (see secrets.files below),
+# never a ConfigMap and never the container image.
+#
+# CHANGE the password before any non-local deployment, e.g.:
+#   helm install ... --set adminUser.password="$(openssl rand -base64 24)"
+# For real environments prefer an ExternalSecret / sealed secret instead of a
+# plaintext value here.
+# ---------------------------------------------------------------------------
+adminUser:
+  id: demo
+  firstName: Demo
+  # Deliberately not "demo" — override this.
+  password: "change-me-please"
+
+# ---------------------------------------------------------------------------
+# Spring Boot application configuration.
+#
+# This whole map is rendered verbatim into a Secret file mounted at
+# /opt/cib/conf/application.yaml and activated through
+# SPRING_CONFIG_ADDITIONAL_LOCATION (see configmaps.env), so it overrides the
+# application.yaml baked into the image. `{{ ... }}` expressions are evaluated
+# by the common-tpl-lib library before rendering.
+# ---------------------------------------------------------------------------
+application:
+  camunda.bpm:
+    admin-user:
+      id: "{{ .Values.adminUser.id }}"
+      password: "{{ .Values.adminUser.password }}"
+      firstName: "{{ .Values.adminUser.firstName }}"
+    filter:
+      create: All tasks
+
+  logging.level.org.cibseven.mcp: INFO
+
+  spring:
+    config:
+      import:
+        - optional:classpath:cibseven-webclient.properties
+    ai:
+      mcp:
+        server:
+          protocol: STREAMABLE
+          name: cibseven-mcp-server
+          version: 1.0.0
+          type: SYNC
+          instructions: "CIB seven MCP server exposing the Engine REST API and business tools to execute CIB seven processes."
+          streamable-http:
+            mcp-endpoint: /mcp
+
+  cibseven:
+    mcp:
+      # Which MCP servers to expose. Only the REST API MCP server is enabled.
+      process-mcp: false
+      restapi-mcp: true
+    webclient:
+      services:
+        basePath: services/v1
+      # Base URL of the engine REST API used by the MCP server. Defaults to the
+      # engine embedded in this same pod. Point it at another CIB seven engine
+      # if you run the engine separately.
+      engineRest:
+        url: http://localhost:8080
+
+  springdoc:
+    api-docs:
+      path: /webapp/v3/api-docs
+    swagger-ui:
+      path: /webapp/swagger-ui
+      operationsSorter: alpha
+      tagsSorter: alpha
+      doc-expansion: none
+
+# ---------------------------------------------------------------------------
+# Environment injected as a ConfigMap (non-sensitive).
+# ---------------------------------------------------------------------------
+configmaps:
+  env:
+    # Make Spring Boot load the mounted application.yaml on top of the one
+    # baked into the image (additional locations take precedence).
+    SPRING_CONFIG_ADDITIONAL_LOCATION: "optional:file:/opt/cib/conf/application.yaml"
+  files: {}
+
+# ---------------------------------------------------------------------------
+# Environment / files injected as a Secret (sensitive).
+# The whole `application` map is rendered here so that the admin password never
+# lands in a ConfigMap or in the image.
+# ---------------------------------------------------------------------------
+secrets:
+  env: {}
+  files:
+    application.yaml:
+      path: /opt/cib/conf/application.yaml
+      value: |-
+        {{ .Values.application | toYaml | toString }}
+
+volumes: {}
+
+initContainers: {}
+
+replicaCount: 1
+
+image:
+  repository: "{{ .Values.global.image.repository }}"
+  name: cibseven-mcp-restapi
+  pullPolicy: "{{ .Values.global.image.pullPolicy }}"
+  # Defaults to .Chart.AppVersion (0.0.3-SNAPSHOT). Override to pin another tag.
+  tag: ""
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+# ---------------------------------------------------------------------------
+# Hardened pod / container security context (better security defaults).
+# ---------------------------------------------------------------------------
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+
+service:
+  ports:
+    http:
+      port: 8080
+      contexts:
+        - /
+        - /mcp
+        - /webapp/swagger-ui
+
+# TCP probes are used instead of HTTP health checks because the demo image does
+# not expose Spring Boot actuator health endpoints. They only assert that the
+# server socket is up. Startup can take a while (engine + webapp bootstrap).
+probes:
+  enabled: "{{ .Values.global.probes.enabled }}"
+  startupProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 40
+  readinessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  livenessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 60
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 6
+
+ingress:
+  enabled: false
+
+resources:
+  enabled: "{{ .Values.global.resources.enabled }}"
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+
+# Single-replica demo: no PodDisruptionBudget and no ServiceMonitor by default.
+podDisruptionBudget:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
