@@ -33,6 +33,28 @@
       <artifactId>cibseven-bpm-spring-boot-starter-rest-4</artifactId>
       <version>${cibseven.version}</version>
     </dependency>
+
+    <!-- ============================================================
+     CIB seven AI Agent Connector dependencies
+     Add these to your pom.xml <dependencies> section.
+     See the README for details.
+     ============================================================ -->
+    <dependency>
+       <groupId>org.cibseven.connect</groupId>
+       <artifactId>cibseven-connect-agent-connector</artifactId>
+       <version>${cibseven.version}</version>
+    </dependency>
+    <dependency>
+       <groupId>org.cibseven.connect</groupId>
+       <artifactId>cibseven-connect-connectors-all</artifactId>
+       <version>${cibseven.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cibseven.bpm</groupId>
+      <artifactId>cibseven-engine-plugin-connect</artifactId>
+      <version>${cibseven.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jdbc</artifactId>
