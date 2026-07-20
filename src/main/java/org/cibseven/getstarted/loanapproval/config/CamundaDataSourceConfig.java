@@ -15,6 +15,7 @@ import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -25,9 +26,14 @@ import jakarta.persistence.EntityManagerFactory;
 
 /**
  * Wires the Camunda/CIB seven engine datasource (configured via
- * {@code camunda.bpm.datasource.*}) and the modeler JPA infrastructure
- * (entities, repositories, REST controllers, service providers) on top of the
- * same datasource. Engine and modeler share one transaction manager.
+ * {@code camunda.bpm.datasource.*}) and the CIB seven JPA modules (modeler and
+ * chat) on top of the same datasource. Engine and JPA modules share one
+ * transaction manager.
+ *
+ * <p>The JPA {@code entityManagerFactory}/{@code transactionManager} are exposed
+ * under their default bean names so that both the modeler repositories (wired
+ * here) and the EE chat repositories (wired by the auto-configured
+ * {@code ChatJpaConfiguration}, which uses the default names) bind to them.
  *
  * <p>The application's primary datasource ({@code spring.datasource.*}, see
  * {@link AppDataSourceConfig}) stays untouched and remains free for the
@@ -35,10 +41,7 @@ import jakarta.persistence.EntityManagerFactory;
  */
 @Configuration
 @EnableConfigurationProperties(ElementTemplateProperties.class)
-@EnableJpaRepositories(
-    basePackages = "org.cibseven.modeler.repository",
-    entityManagerFactoryRef = "modelerEntityManagerFactory",
-    transactionManagerRef = "camundaBpmTransactionManager")
+@EnableJpaRepositories(basePackages = "org.cibseven.modeler.repository")
 @ComponentScan({
     "org.cibseven.modeler.rest",
     "org.cibseven.modeler.provider",
@@ -60,39 +63,44 @@ public class CamundaDataSourceConfig {
     return properties.initializeDataSourceBuilder().build();
   }
 
+  /**
+   * Shared entity manager factory for the modeler and chat modules, on the engine
+   * datasource. Exposed under the default bean name {@code entityManagerFactory} so
+   * the EE chat repositories (which use the default) bind to it as well.
+   */
   @Bean
-  public LocalContainerEntityManagerFactoryBean modelerEntityManagerFactory(
+  @Primary
+  public LocalContainerEntityManagerFactoryBean entityManagerFactory(
       @Qualifier("camundaBpmDataSource") DataSource dataSource) {
-    // same naming strategies Spring Boot applies to its default persistence
-    // unit, so the modeler tables keep their usual names
+    // same naming strategies Spring Boot applies to its default persistence unit
     Map<String, Object> jpaProperties = new HashMap<>();
     jpaProperties.put("hibernate.physical_naming_strategy",
         CamelCaseToUnderscoresNamingStrategy.class.getName());
     jpaProperties.put("hibernate.implicit_naming_strategy",
         SpringImplicitNamingStrategy.class.getName());
+    // schema is managed externally (matches real deployments); the modeler/chat
+    // tables must already exist in the datasource
     jpaProperties.put("hibernate.hbm2ddl.auto", "none");
 
     LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
     emf.setDataSource(dataSource);
-    emf.setPersistenceUnitName("modeler");
-    emf.setPackagesToScan("org.cibseven.modeler.model");
+    emf.setPersistenceUnitName("cibseven");
+    emf.setPackagesToScan("org.cibseven.modeler.model", "org.cibseven.chat.model");
     emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
     emf.setJpaPropertyMap(jpaProperties);
     return emf;
   }
 
   /**
-   * Shared transaction manager for the engine and the modeler. A
-   * {@link JpaTransactionManager} is required for the modeler's JPA
-   * repositories; it also exposes the underlying JDBC connection of
-   * {@code camundaBpmDataSource}, so the engine participates in the same
-   * transactions. Picked up by the CIB seven starter via its qualifier
-   * (org.cibseven.bpm.spring.boot.starter.configuration.impl.DefaultDatasourceConfiguration),
-   * and used by the modeler repositories via {@code transactionManagerRef}.
+   * Shared transaction manager for the engine, modeler and chat. Exposed under the
+   * default name {@code transactionManager} (used by the chat and modeler
+   * repositories) and {@code camundaBpmTransactionManager} (picked up by the CIB
+   * seven starter for the engine), so all participate in the same transactions.
    */
-  @Bean("camundaBpmTransactionManager")
-  public PlatformTransactionManager camundaTransactionManager(
-      @Qualifier("modelerEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+  @Bean(name = {"transactionManager", "camundaBpmTransactionManager"})
+  @Primary
+  public PlatformTransactionManager transactionManager(
+      @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
     return new JpaTransactionManager(entityManagerFactory);
   }
 }
