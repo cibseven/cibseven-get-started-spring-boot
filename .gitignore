@@ -24,3 +24,6 @@ hs_err_pid*
 *.mv.db
 *.trace.db
 .vscode/launch.json
+
+/config/
+.factorypath
