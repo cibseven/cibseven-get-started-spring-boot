@@ -69,7 +69,7 @@
     </dependency>
 
     <!-- ============================================================
-     GraalVM JavaScript engine for CIB Seven Script Tasks
+     GraalVM JavaScript engine for CIB seven Script Tasks
      Add these to your pom.xml <dependencies> section.
      ============================================================ -->
 
@@ -80,7 +80,7 @@
         <version>23.0.6</version>
     </dependency>
 
-    <!-- JSR-223 ScriptEngine adapter (bridges GraalJS ↔ javax.script API that CIB Seven uses) -->
+    <!-- JSR-223 ScriptEngine adapter (bridges GraalJS ↔ javax.script API that CIB seven uses) -->
     <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js-scriptengine</artifactId>
