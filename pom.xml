@@ -77,7 +77,7 @@
     <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js</artifactId>
-        <version>23.0.6</version>
+        <version>23.0.13.1</version>
     </dependency>
 
     <!-- JSR-223 ScriptEngine adapter (bridges GraalJS ↔ javax.script API that CIB seven uses) -->
