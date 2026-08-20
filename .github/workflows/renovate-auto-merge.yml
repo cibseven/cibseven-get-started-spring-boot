@@ -1,0 +1,22 @@
+name: Renovate auto-merge
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened, labeled ]
+jobs:
+  all-checks-passed:
+    # TEMPORARY: disabled until the rollout is verified with the dedicated Renovate token/account.
+    # Remove "false &&" only after confirming the actor check and merge policy are correct.
+    if: false && contains(github.event.pull_request.labels.*.name, 'automerge')
+    name: All checks passed
+    runs-on: ubuntu-latest
+    permissions:
+      checks: read
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: wechuli/allcheckspassed@v2.4.0
+      - name: Report skipped pull request auto-merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: echo "Auto-merge is temporarily disabled for PR $PR_NUMBER in $GITHUB_REPOSITORY."
