@@ -33,7 +33,7 @@ To use this feature, you need to add the following dependencies to the `<depende
 ```xml
     <dependency>
        <groupId>org.cibseven.connect</groupId>
-       <artifactId>cibseven-connect-agent-connector</artifactId>
+       <artifactId>cibseven-connect-ai-agent</artifactId>
        <version>${cibseven.version}</version>
     </dependency>
     <dependency>

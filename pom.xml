@@ -5,13 +5,21 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <cibseven.version>2.2.0</cibseven.version>
-    <spring-boot.version>4.0.6</spring-boot.version>
+    <cibseven.version>3.0.0</cibseven.version>
+    <spring-boot.version>4.1.2</spring-boot.version>
     <maven.compiler.release>21</maven.compiler.release>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <!-- cibseven-bom goes before spring-boot-dependencies: Spin JSON on Jackson 3 needs json-path 3 -->
+      <dependency>
+        <groupId>org.cibseven.bpm</groupId>
+        <artifactId>cibseven-bom</artifactId>
+        <version>${cibseven.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -25,12 +33,12 @@
   <dependencies>
     <dependency>
       <groupId>org.cibseven.bpm.springboot</groupId>
-      <artifactId>cibseven-bpm-spring-boot-starter-webapp-4</artifactId>
+      <artifactId>cibseven-bpm-spring-boot-starter-webapp</artifactId>
       <version>${cibseven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.cibseven.bpm.springboot</groupId>
-      <artifactId>cibseven-bpm-spring-boot-starter-rest-4</artifactId>
+      <artifactId>cibseven-bpm-spring-boot-starter-rest</artifactId>
       <version>${cibseven.version}</version>
     </dependency>
 
@@ -77,14 +85,15 @@
     <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js</artifactId>
-        <version>23.0.6</version>
+        <version>25.0.1</version>
+        <type>pom</type>
     </dependency>
 
     <!-- JSR-223 ScriptEngine adapter (bridges GraalJS ↔ javax.script API that CIB seven uses) -->
     <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js-scriptengine</artifactId>
-        <version>23.0.6</version>
+        <version>25.0.1</version>
     </dependency>
 
 
@@ -133,13 +142,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <repositories>
-    <repository>
-      <id>mvn-cibseven-enterprise-snapshots</id>
-      <name>CIB seven EE Snapshots repository</name>
-      <url>https://artifacts.cibseven.org/repository/enterprise-snapshots</url>
-    </repository>
-  </repositories>
 
 </project>
